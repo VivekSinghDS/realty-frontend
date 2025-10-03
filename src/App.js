@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-// A utility function to deeply merge objects, useful for state updates.
+// The deepMerge utility is still very useful for robust state updates.
 const deepMerge = (target, source) => {
   const output = { ...target };
   if (isObject(target) && isObject(source)) {
@@ -29,7 +29,7 @@ function App() {
   const [renderedData, setRenderedData] = useState({});
   const [loading, setLoading] = useState(false);
   
-  // Define the top-level keys you expect to render iteratively
+  // Updated list to include "obligations_list" from your example
   const topLevelKeys = ['fact_sheet', 'money_map', 'obligations_list', 'audit_and_exceptions'];
 
   const handleSubmit = async (e) => {
@@ -38,13 +38,11 @@ function App() {
     setLoading(true);
 
     let jsonBuffer = "";
-    // Keep track of keys that have already been fully parsed and rendered
-    const parsedKeys = new Set();
 
     try {
       const res = await fetch("http://localhost:8000/sample-stream", {
         method: "POST",
-        body: new FormData(e.target), // Simpler way to handle form data
+        body: new FormData(e.target),
       });
 
       const reader = res.body.getReader();
@@ -56,52 +54,63 @@ function App() {
 
         jsonBuffer += decoder.decode(value, { stream: true });
 
-        // **NEW PARSING LOGIC**
-        // For each key we are looking for...
+        // On every chunk, try to parse all keys. This allows for growing arrays.
         for (const key of topLevelKeys) {
-          // ...if we haven't already parsed it...
-          if (!parsedKeys.has(key)) {
-            // ...try to find a complete object for it in the buffer.
-            const keyPattern = `"${key}"`;
-            const keyIndex = jsonBuffer.indexOf(keyPattern);
+          const keyPattern = `"${key}"`;
+          let keyIndex = -1;
+          let searchFrom = 0;
+          
+          // Find the last occurrence of the key in case the stream is weird
+          while(jsonBuffer.indexOf(keyPattern, searchFrom) !== -1){
+            keyIndex = jsonBuffer.indexOf(keyPattern, searchFrom);
+            searchFrom = keyIndex + 1;
+          }
 
-            if (keyIndex === -1) continue;
+          if (keyIndex === -1) continue;
 
-            // Find the opening brace of the object value
-            const startIndex = jsonBuffer.indexOf('{', keyIndex + keyPattern.length);
-            if (startIndex === -1) continue;
+          // Find the start of the value (the first '{' or '[' after the key)
+          let startIndex = -1;
+          let openingChar = '';
+          let closingChar = '';
 
-            let braceCount = 1;
-            let endIndex = -1;
-
-            // Start scanning from after the opening brace
-            for (let i = startIndex + 1; i < jsonBuffer.length; i++) {
-              if (jsonBuffer[i] === '{') {
-                braceCount++;
-              } else if (jsonBuffer[i] === '}') {
-                braceCount--;
-              }
-              // If braceCount is 0, we've found the end of the object
-              if (braceCount === 0) {
-                endIndex = i;
-                break;
-              }
+          for (let i = keyIndex + keyPattern.length; i < jsonBuffer.length; i++) {
+            const char = jsonBuffer[i];
+            if (char === '{' || char === '[') {
+              startIndex = i;
+              openingChar = char;
+              closingChar = (char === '{') ? '}' : ']';
+              break;
             }
-            
-            // If we found a complete object...
-            if (endIndex !== -1) {
-              const objectString = jsonBuffer.substring(startIndex, endIndex + 1);
-              try {
-                const parsedObject = JSON.parse(objectString);
-                
-                // Merge the newly parsed object into our state
-                setRenderedData(prev => deepMerge(prev, { [key]: parsedObject }));
-                
-                // Mark this key as done
-                parsedKeys.add(key);
-              } catch (e) {
-                // This can happen if the extracted string is still not perfect JSON. Ignore and wait.
-              }
+          }
+          
+          if (startIndex === -1) continue;
+
+          // Balance the delimiters (either braces or brackets)
+          let delimiterCount = 1;
+          let endIndex = -1;
+
+          for (let i = startIndex + 1; i < jsonBuffer.length; i++) {
+            if (jsonBuffer[i] === openingChar) {
+              delimiterCount++;
+            } else if (jsonBuffer[i] === closingChar) {
+              delimiterCount--;
+            }
+            if (delimiterCount === 0) {
+              endIndex = i;
+              break;
+            }
+          }
+          
+          if (endIndex !== -1) {
+            const valueString = jsonBuffer.substring(startIndex, endIndex + 1);
+            try {
+              const parsedValue = JSON.parse(valueString);
+              
+              // Use deepMerge to update the state with the latest version of this key's value
+              setRenderedData(prev => deepMerge(prev, { [key]: parsedValue }));
+              
+            } catch (e) {
+              // Incomplete but parsable segment found, ignore and wait for more data
             }
           }
         }
@@ -116,35 +125,13 @@ function App() {
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial" }}>
       <h1>Lease Analysis</h1>
-      {/* Added name attributes to inputs for easier FormData creation */}
       <form onSubmit={handleSubmit}>
-        <input
-          name="text"
-          type="text"
-          placeholder="Enter text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          style={{ padding: "0.5rem", marginBottom: "1rem", display: "block" }}
-        />
-        <input
-          name="file"
-          type="file"
-          onChange={(e) => setFile(e.target.files[0])}
-          style={{ marginBottom: "1rem", display: "block" }}
-        />
-        <button type="submit" style={{ padding: "0.5rem" }}>
-          Submit
-        </button>
+        <input name="text" type="text" placeholder="Enter text" value={text} onChange={(e) => setText(e.target.value)} style={{ padding: "0.5rem", marginBottom: "1rem", display: "block" }} />
+        <input name="file" type="file" onChange={(e) => setFile(e.target.files[0])} style={{ marginBottom: "1rem", display: "block" }} />
+        <button type="submit" style={{ padding: "0.5rem" }}>Submit</button>
       </form>
       {loading && <p>Streaming...</p>}
-      <div
-        style={{
-          marginTop: "2rem",
-          padding: "1rem",
-          border: "1px solid #ddd",
-          minHeight: "100px",
-        }}
-      >
+      <div style={{ marginTop: "2rem", padding: "1rem", border: "1px solid #ddd", minHeight: "100px" }}>
         <strong>Response:</strong>
         <div style={{ whiteSpace: "pre-wrap" }}>
           {Object.keys(renderedData).length > 0 ? (
