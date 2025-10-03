@@ -15,17 +15,22 @@ const parser = createStreamingParser({
 function App() {
   const [file, setFile] = useState(null);
   const [text, setText] = useState("");
-  const [response, setResponse] = useState({});
+  const [response, setResponse] = useState([]); // Make this an array for multiple JSON chunks
   const [loading, setLoading] = useState(false);
 
   // NEW: updateUI function
   const updateUI = (parsedChunk) => {
-    if (parsedChunk && typeof parsedChunk === "object") {
-      // Only update top-level keys
-      setResponse((prev) => ({
-        ...prev,
-        ...parsedChunk, // merge new keys or updates into response
-      }));
+    if (parsedChunk) {
+      setResponse((prev) => {
+        const updated = [...prev, parsedChunk];
+        try {
+          console.log(updated)
+        } catch (error) {
+          // ❌ do nothing on error
+        }
+        
+        return updated;
+      });
     }
   };
 
@@ -98,34 +103,14 @@ function App() {
         }}
       >
         <strong>Response:</strong>
-        <div style={{ marginTop: "2rem", padding: "1rem", border: "1px solid #ddd" }}>
-          <strong>Response:</strong>
-
-          {response.fact_sheet && (
-            <div>
-              <h3>📄 Fact Sheet</h3>
-              <pre>{JSON.stringify(response.fact_sheet, null, 2)}</pre>
-              <hr />
+        <pre style={{ whiteSpace: "pre-wrap" }}>
+          {response.map((item, idx) => (
+            <div key={idx}>
+              {JSON.stringify(item, null, 2)}
+              {"\n-----\n"} 
             </div>
-          )}
-
-          {response.money_map && (
-            <div>
-              <h3>💰 Money Map</h3>
-              <pre>{JSON.stringify(response.money_map, null, 2)}</pre>
-              <hr />
-            </div>
-          )}
-
-          {response.audit_and_exceptions && (
-            <div>
-              <h3>🛠️ Audit & Exceptions</h3>
-              <pre>{JSON.stringify(response.audit_and_exceptions, null, 2)}</pre>
-              <hr />
-            </div>
-          )}
-        </div>
-
+          ))}
+        </pre>
       </div>
     </div>
   );
