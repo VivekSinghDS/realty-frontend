@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Card from "./components/Card";
+import DataItem from "./components/DataItem";
+import "./App.css";
 
 // The deepMerge utility is still very useful for robust state updates.
 const deepMerge = (target, source) => {
@@ -122,34 +125,165 @@ function App() {
     }
   };
 
+  // Helper function to render nested data
+  const renderValue = (value) => {
+    if (value === null || value === undefined) return "N/A";
+    if (typeof value === "boolean") return value ? "Yes" : "No";
+    if (typeof value === "string" || typeof value === "number") return value;
+    if (Array.isArray(value)) {
+      return (
+        <ul style={{ margin: "0.5rem 0", paddingLeft: "1.5rem" }}>
+          {value.map((item, idx) => (
+            <li key={idx} style={{ marginBottom: "0.5rem" }}>
+              {typeof item === "object" ? renderObject(item) : item}
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    if (typeof value === "object") {
+      return renderObject(value);
+    }
+    return String(value);
+  };
+
+  // Helper function to render objects
+  const renderObject = (obj) => {
+    return (
+      <div style={{ marginLeft: "1rem", marginTop: "0.5rem" }}>
+        {Object.entries(obj).map(([key, value]) => (
+          <DataItem
+            key={key}
+            label={formatLabel(key)}
+            value={renderValue(value)}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  // Format camelCase or snake_case to readable format
+  const formatLabel = (str) => {
+    return str
+      .replace(/([A-Z])/g, " $1")
+      .replace(/_/g, " ")
+      .replace(/^./, (char) => char.toUpperCase())
+      .trim();
+  };
+
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial" }}>
-      <h1>Lease Analysis</h1>
-      <form onSubmit={handleSubmit}>
-        <input name="text" type="text" placeholder="Enter text" value={text} onChange={(e) => setText(e.target.value)} style={{ padding: "0.5rem", marginBottom: "1rem", display: "block" }} />
-        <input name="assets" type="file" onChange={(e) => setFile(e.target.files[0])} style={{ marginBottom: "1rem", display: "block" }} />
-        <button type="submit" style={{ padding: "0.5rem" }}>Submit</button>
+    <div style={{ 
+      padding: "2rem", 
+      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      backgroundColor: "#f5f5f5",
+      minHeight: "100vh"
+    }}>
+      <h1 style={{ color: "#333", marginBottom: "2rem" }}>Lease Analysis</h1>
+      <form onSubmit={handleSubmit} style={{
+        backgroundColor: "white",
+        padding: "1.5rem",
+        borderRadius: "8px",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+        marginBottom: "2rem"
+      }}>
+        <input 
+          name="text" 
+          type="text" 
+          placeholder="Enter text" 
+          value={text} 
+          onChange={(e) => setText(e.target.value)} 
+          style={{ 
+            padding: "0.75rem", 
+            marginBottom: "1rem", 
+            display: "block",
+            width: "100%",
+            border: "1px solid #ddd",
+            borderRadius: "4px",
+            fontSize: "1rem"
+          }} 
+        />
+        <input 
+          name="assets" 
+          type="file" 
+          onChange={(e) => setFile(e.target.files[0])} 
+          style={{ 
+            marginBottom: "1rem", 
+            display: "block",
+            padding: "0.5rem"
+          }} 
+        />
+        <button 
+          type="submit" 
+          style={{ 
+            padding: "0.75rem 2rem",
+            backgroundColor: "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            fontSize: "1rem",
+            cursor: "pointer",
+            fontWeight: "600"
+          }}
+          onMouseOver={(e) => e.target.style.backgroundColor = "#0056b3"}
+          onMouseOut={(e) => e.target.style.backgroundColor = "#007bff"}
+        >
+          Submit
+        </button>
       </form>
-      {loading && <p>Streaming...</p>}
-      <div style={{ marginTop: "2rem", padding: "1rem", border: "1px solid #ddd", minHeight: "100px" }}>
-        <strong>Response:</strong>
-        <div style={{ whiteSpace: "pre-wrap" }}>
-          {Object.keys(renderedData).length > 0 ? (
-             Object.keys(renderedData).map((key) => {
-               if (topLevelKeys.includes(key) && renderedData[key]) {
-                 return (
-                   <div key={key} style={{ border: '1px solid #eee', padding: '10px', marginTop: '10px' }}>
-                     <h2 style={{textTransform: 'capitalize'}}>{key.replace(/_/g, ' ')}</h2>
-                     <pre>{JSON.stringify(renderedData[key], null, 2)}</pre>
-                   </div>
-                 );
-               }
-               return null;
-             })
-          ) : (
-            !loading && <p>No data yet. Submit to start.</p>
-          )}
+      
+      {loading && (
+        <div style={{
+          backgroundColor: "#fff3cd",
+          color: "#856404",
+          padding: "1rem",
+          borderRadius: "4px",
+          marginBottom: "1rem",
+          border: "1px solid #ffeaa7"
+        }}>
+          <strong>⏳ Streaming data...</strong>
         </div>
+      )}
+      
+      <div style={{ marginTop: "2rem" }}>
+        {Object.keys(renderedData).length > 0 ? (
+          <div style={{ display: "grid", gap: "1.5rem" }}>
+            {topLevelKeys.map((key) => {
+              if (renderedData[key]) {
+                return (
+                  <Card key={key} title={formatLabel(key)}>
+                    {typeof renderedData[key] === "object" && !Array.isArray(renderedData[key]) ? (
+                      <div>
+                        {Object.entries(renderedData[key]).map(([subKey, subValue]) => (
+                          <DataItem
+                            key={subKey}
+                            label={formatLabel(subKey)}
+                            value={renderValue(subValue)}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div>{renderValue(renderedData[key])}</div>
+                    )}
+                  </Card>
+                );
+              }
+              return null;
+            })}
+          </div>
+        ) : (
+          !loading && (
+            <div style={{
+              backgroundColor: "white",
+              padding: "3rem",
+              borderRadius: "8px",
+              textAlign: "center",
+              color: "#666",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+            }}>
+              <p style={{ fontSize: "1.1rem" }}>No data yet. Submit the form to start analyzing.</p>
+            </div>
+          )
+        )}
       </div>
     </div>
   );
