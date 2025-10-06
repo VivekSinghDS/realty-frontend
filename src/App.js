@@ -30,7 +30,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   
   // Updated list to include "obligations_list" from your example
-  const topLevelKeys = ['fact_sheet', 'money_map', 'obligations_list', 'audit_and_exceptions'];
+  const topLevelKeys = ['executiveSummary', 'leaseInformation', 'space', 'chargeSchedules', "otherLeaseProvisions"];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +40,7 @@ function App() {
     let jsonBuffer = "";
 
     try {
-      const res = await fetch("http://localhost:8000/sample-stream", {
+      const res = await fetch("http://localhost:8000/lease/general", {
         method: "POST",
         body: new FormData(e.target),
       });
@@ -127,7 +127,7 @@ function App() {
       <h1>Lease Analysis</h1>
       <form onSubmit={handleSubmit}>
         <input name="text" type="text" placeholder="Enter text" value={text} onChange={(e) => setText(e.target.value)} style={{ padding: "0.5rem", marginBottom: "1rem", display: "block" }} />
-        <input name="file" type="file" onChange={(e) => setFile(e.target.files[0])} style={{ marginBottom: "1rem", display: "block" }} />
+        <input name="assets" type="file" onChange={(e) => setFile(e.target.files[0])} style={{ marginBottom: "1rem", display: "block" }} />
         <button type="submit" style={{ padding: "0.5rem" }}>Submit</button>
       </form>
       {loading && <p>Streaming...</p>}
