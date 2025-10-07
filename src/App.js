@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Card from "./components/Card";
 import DataItem from "./components/DataItem";
+import { formatLabel, renderValue, renderObject } from "./utils/helpers";
 import "./App.css";
 
 // The deepMerge utility is still very useful for robust state updates.
@@ -124,53 +125,6 @@ function App() {
       setLoading(false);
     }
   };
-
-  // Helper function to render nested data
-  const renderValue = (value) => {
-    if (value === null || value === undefined) return "N/A";
-    if (typeof value === "boolean") return value ? "Yes" : "No";
-    if (typeof value === "string" || typeof value === "number") return value;
-    if (Array.isArray(value)) {
-      return (
-        <ul style={{ margin: "0.5rem 0", paddingLeft: "1.5rem" }}>
-          {value.map((item, idx) => (
-            <li key={idx} style={{ marginBottom: "0.5rem" }}>
-              {typeof item === "object" ? renderObject(item) : item}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-    if (typeof value === "object") {
-      return renderObject(value);
-    }
-    return String(value);
-  };
-
-  // Helper function to render objects
-  const renderObject = (obj) => {
-    return (
-      <div style={{ marginLeft: "1rem", marginTop: "0.5rem" }}>
-        {Object.entries(obj).map(([key, value]) => (
-          <DataItem
-            key={key}
-            label={formatLabel(key)}
-            value={renderValue(value)}
-          />
-        ))}
-      </div>
-    );
-  };
-
-  // Format camelCase or snake_case to readable format
-  const formatLabel = (str) => {
-    return str
-      .replace(/([A-Z])/g, " $1")
-      .replace(/_/g, " ")
-      .replace(/^./, (char) => char.toUpperCase())
-      .trim();
-  };
-
   return (
     <div style={{ 
       padding: "2rem", 
@@ -249,6 +203,22 @@ function App() {
           <div style={{ display: "grid", gap: "1.5rem" }}>
             {topLevelKeys.map((key) => {
               if (renderedData[key]) {
+                // Check if the section has any non-empty content
+                const hasContent = typeof renderedData[key] === "object" && !Array.isArray(renderedData[key]) 
+                  ? Object.values(renderedData[key]).some(value => {
+                      if (value === null || value === undefined) return false;
+                      if (typeof value === 'string' && value.trim() === '') return false;
+                      if (Array.isArray(value) && value.length === 0) return false;
+                      if (typeof value === 'object' && Object.keys(value).length === 0) return false;
+                      return true;
+                    })
+                  : !(renderedData[key] === null || renderedData[key] === undefined || 
+                      (typeof renderedData[key] === 'string' && renderedData[key].trim() === '') ||
+                      (Array.isArray(renderedData[key]) && renderedData[key].length === 0) ||
+                      (typeof renderedData[key] === 'object' && Object.keys(renderedData[key]).length === 0));
+
+                if (!hasContent) return null;
+
                 return (
                   <Card key={key} title={formatLabel(key)}>
                     {typeof renderedData[key] === "object" && !Array.isArray(renderedData[key]) ? (
