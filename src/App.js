@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Card from "./components/Card";
 import DataItem from "./components/DataItem";
+import CollapsibleSection from "./components/CollapsibleSection";
 import { formatLabel, renderValue, renderObject } from "./utils/helpers";
 import "./App.css";
 
@@ -44,11 +45,21 @@ function App() {
     let jsonBuffer = "";
 
     try {
-      const res = await fetch("http://localhost:8000/lease/general", {
+      // const res = await fetch("http://localhost:8000/sample-stream", {
+      //   method: "POST",
+      //   body: new FormData(e.target),
+      // });
+
+      // const res = await fetch("http://localhost:8000/lease/general", {
+      //   method: "POST",
+      //   body: new FormData(e.target),
+      // });
+
+      const res = await fetch("https://realty-lease-poc-6uti.onrender.com/lease/general", {
         method: "POST",
         body: new FormData(e.target),
       });
-
+      
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
 
@@ -141,22 +152,6 @@ function App() {
         marginBottom: "2rem"
       }}>
         <input 
-          name="text" 
-          type="text" 
-          placeholder="Enter text" 
-          value={text} 
-          onChange={(e) => setText(e.target.value)} 
-          style={{ 
-            padding: "0.75rem", 
-            marginBottom: "1rem", 
-            display: "block",
-            width: "100%",
-            border: "1px solid #ddd",
-            borderRadius: "4px",
-            fontSize: "1rem"
-          }} 
-        />
-        <input 
           name="assets" 
           type="file" 
           onChange={(e) => setFile(e.target.files[0])} 
@@ -220,21 +215,19 @@ function App() {
                 if (!hasContent) return null;
 
                 return (
-                  <Card key={key} title={formatLabel(key)}>
+                  <div key={key}>
                     {typeof renderedData[key] === "object" && !Array.isArray(renderedData[key]) ? (
-                      <div>
-                        {Object.entries(renderedData[key]).map(([subKey, subValue]) => (
-                          <DataItem
-                            key={subKey}
-                            label={formatLabel(subKey)}
-                            value={renderValue(subValue)}
-                          />
-                        ))}
-                      </div>
+                      <CollapsibleSection 
+                        title={formatLabel(key)} 
+                        data={renderedData[key]} 
+                        threshold={4}
+                      />
                     ) : (
-                      <div>{renderValue(renderedData[key])}</div>
+                      <Card title={formatLabel(key)}>
+                        <div>{renderValue(renderedData[key])}</div>
+                      </Card>
                     )}
-                  </Card>
+                  </div>
                 );
               }
               return null;
