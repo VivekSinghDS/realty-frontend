@@ -1,5 +1,5 @@
-// const API_BASE_URL = 'https://realty-lease-poc-6uti.onrender.com';
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = 'https://realty-lease-poc-6uti.onrender.com';
+// const API_BASE_URL = "http://localhost:8000";
 const uploadFile = async (file, endpoint) => {
   const formData = new FormData();
   formData.append('assets', file);
