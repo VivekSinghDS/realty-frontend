@@ -77,7 +77,7 @@ const MiscTab = ({ data, loading }) => {
       <div className="tab-content-container">
         <div className="loading-state">
           <div className="spinner"></div>
-          <p>Loading miscellaneous provisions...</p>
+          <p>Loading Lease Sections</p>
         </div>
       </div>
     );
