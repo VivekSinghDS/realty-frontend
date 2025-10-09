@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FormattedText } from '../utils/textFormatter';
+import { FormattedText, extractExecutiveSummary } from '../utils/textFormatter';
 import './InfoTab.css';
 import '../utils/textFormatter.css';
 
@@ -73,11 +73,51 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
         <div className="summary-content">
           {executiveSummary ? (
             <div className="summary-data">
-              {typeof executiveSummary === 'string' ? (
-                <FormattedText text={executiveSummary} maxSentences={2} />
-              ) : (
-                <pre>{JSON.stringify(executiveSummary, null, 2)}</pre>
-              )}
+              {(() => {
+                const summaryData = extractExecutiveSummary(executiveSummary);
+                
+                if (typeof summaryData === 'string') {
+                  return <FormattedText text={summaryData} maxSentences={3} />;
+                }
+                
+                if (summaryData && summaryData.value) {
+                  return (
+                    <div className="executive-summary-formatted">
+                      <div className="summary-item">
+                        <span className="summary-label">Summary:</span>
+                        <div className="summary-value">
+                          <FormattedText text={summaryData.value || 'No summary available'} maxSentences={3} />
+                        </div>
+                        {summaryData.citation && (
+                          <div className="summary-citation">
+                            📄 Citation: {summaryData.citation}
+                          </div>
+                        )}
+                        {summaryData.amendments && summaryData.amendments.length > 0 && (
+                          <div className="summary-amendments">
+                            <h5>Amendments:</h5>
+                            <ul className="amendments-list">
+                              {summaryData.amendments.map((amendment, index) => (
+                                <li key={index}>
+                                  <strong>Amendment {index + 1}:</strong> 
+                                  <FormattedText text={amendment} maxSentences={2} />
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                }
+                
+                // Fallback for unexpected data structure
+                return (
+                  <div className="summary-fallback">
+                    <FormattedText text={JSON.stringify(executiveSummary, null, 2)} maxSentences={3} />
+                  </div>
+                );
+              })()}
             </div>
           ) : (
             <div className="no-data">

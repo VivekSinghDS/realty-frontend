@@ -45,3 +45,24 @@ export const FormattedText = ({ text, maxSentences = 2, className = "" }) => {
 export const shouldFormatText = (text, threshold = 100) => {
   return text && typeof text === 'string' && text.length > threshold;
 };
+
+// Helper function to extract executive summary data
+export const extractExecutiveSummary = (data) => {
+  if (!data) return null;
+  
+  // Handle different possible data structures
+  if (typeof data === 'string') {
+    return { value: data };
+  }
+  
+  if (data.executiveSummary) {
+    return data.executiveSummary;
+  }
+  
+  if (data.value) {
+    return data;
+  }
+  
+  // If it's an object but doesn't match expected structure, return as is
+  return data;
+};
