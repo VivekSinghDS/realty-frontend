@@ -55,7 +55,7 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Realty Lease Analysis</h1>
+        <h1>Lease Abstract</h1>
         <p>Upload your lease document to analyze key information</p>
       </header>
 
