@@ -49,6 +49,17 @@
   margin-top: 2rem;
 }
 
+.analysis-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .tab-content {
   min-height: 400px;
 }
@@ -229,4 +240,23 @@
   border-left-color: #0056b3;
   background: #f0f8ff;
   transform: translateX(2px);
+}
+
+/* Responsive design for analysis header */
+@media (max-width: 768px) {
+  .analysis-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+  
+  .analysis-header > * {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .analysis-header {
+    padding: 0.75rem;
+  }
 }

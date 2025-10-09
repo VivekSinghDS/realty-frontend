@@ -6,6 +6,7 @@ import InfoTab from "./components/InfoTab";
 import SpaceTab from "./components/SpaceTab";
 import ChargeSchedulesTab from "./components/ChargeSchedulesTab";
 import MiscTab from "./components/MiscTab";
+import DownloadButton from "./components/DownloadButton";
 import { analyzeDocument } from "./services/api";
 
 function App() {
@@ -67,10 +68,17 @@ function App() {
 
         {uploadedFile && (
           <div className="analysis-section">
-            <TabNavigation 
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-            />
+            <div className="analysis-header">
+              <TabNavigation 
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
+              />
+              <DownloadButton 
+                analysisData={analysisData}
+                uploadedFileName={uploadedFile.name}
+                disabled={loading}
+              />
+            </div>
             <div className="tab-content">
               {renderActiveTab()}
             </div>
