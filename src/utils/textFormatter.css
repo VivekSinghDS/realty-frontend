@@ -1,0 +1,24 @@
+.text-chunk {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.bullet-point {
+  color: #007bff;
+  font-weight: bold;
+  margin-right: 0.75rem;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+.chunk-text {
+  flex: 1;
+  color: #555;
+}
+
+.text-chunk:last-child {
+  margin-bottom: 0;
+}

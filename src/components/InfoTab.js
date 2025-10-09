@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react';
-import { getExecutiveSummary } from '../services/api';
+import { FormattedText } from '../utils/textFormatter';
 import './InfoTab.css';
+import '../utils/textFormatter.css';
 
-const InfoTab = ({ data, loading }) => {
-  const [executiveSummary, setExecutiveSummary] = useState(null);
-  const [summaryLoading, setSummaryLoading] = useState(false);
-
-  // This would be called when the component mounts if we had the file
-  // For now, we'll just show the lease information data
+const InfoTab = ({ data, executiveSummary, loading }) => {
 
   const renderDataItem = (label, item, key) => {
     if (!item) return null;
@@ -15,7 +11,9 @@ const InfoTab = ({ data, loading }) => {
     return (
       <div key={key} className="data-item">
         <span className="data-item-label">{label}:</span>
-        <div className="data-item-value">{item.value || 'N/A'}</div>
+        <div className="data-item-value">
+          <FormattedText text={item.value || 'N/A'} maxSentences={2} />
+        </div>
         {item.citation && (
           <div className="data-item-citation">
             📄 Citation: {item.citation}
@@ -25,7 +23,8 @@ const InfoTab = ({ data, loading }) => {
           <ul className="amendments-list">
             {item.amendments.map((amendment, index) => (
               <li key={index}>
-                <strong>Amendment {index + 1}:</strong> {amendment}
+                <strong>Amendment {index + 1}:</strong> 
+                <FormattedText text={amendment} maxSentences={2} />
               </li>
             ))}
           </ul>
@@ -72,15 +71,10 @@ const InfoTab = ({ data, loading }) => {
       <div className="executive-summary-section">
         <h2 className="section-title">📊 Executive Summary</h2>
         <div className="summary-content">
-          {summaryLoading ? (
-            <div className="loading-state">
-              <div className="spinner"></div>
-              <p>Loading executive summary...</p>
-            </div>
-          ) : executiveSummary ? (
+          {executiveSummary ? (
             <div className="summary-data">
               {typeof executiveSummary === 'string' ? (
-                <p>{executiveSummary}</p>
+                <FormattedText text={executiveSummary} maxSentences={2} />
               ) : (
                 <pre>{JSON.stringify(executiveSummary, null, 2)}</pre>
               )}

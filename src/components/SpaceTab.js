@@ -1,4 +1,6 @@
+import { FormattedText } from '../utils/textFormatter';
 import './SpaceTab.css';
+import '../utils/textFormatter.css';
 
 const SpaceTab = ({ data, loading }) => {
   const renderDataItem = (label, item, key) => {
@@ -7,7 +9,9 @@ const SpaceTab = ({ data, loading }) => {
     return (
       <div key={key} className="data-item">
         <span className="data-item-label">{label}:</span>
-        <div className="data-item-value">{item.value || 'N/A'}</div>
+        <div className="data-item-value">
+          <FormattedText text={item.value || 'N/A'} maxSentences={2} />
+        </div>
         {item.citation && (
           <div className="data-item-citation">
             📄 Citation: {item.citation}
@@ -17,7 +21,8 @@ const SpaceTab = ({ data, loading }) => {
           <ul className="amendments-list">
             {item.amendments.map((amendment, index) => (
               <li key={index}>
-                <strong>Amendment {index + 1}:</strong> {amendment}
+                <strong>Amendment {index + 1}:</strong> 
+                <FormattedText text={amendment} maxSentences={2} />
               </li>
             ))}
           </ul>

@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { FormattedText } from '../utils/textFormatter';
 import './MiscTab.css';
+import '../utils/textFormatter.css';
 
 const MiscTab = ({ data, loading }) => {
   const [expandedSections, setExpandedSections] = useState({});
@@ -17,7 +19,9 @@ const MiscTab = ({ data, loading }) => {
     return (
       <div key={key} className="data-item">
         <span className="data-item-label">{label}:</span>
-        <div className="data-item-value">{item.value || 'N/A'}</div>
+        <div className="data-item-value">
+          <FormattedText text={item.value || 'N/A'} maxSentences={2} />
+        </div>
         {item.citation && (
           <div className="data-item-citation">
             📄 Citation: {item.citation}
@@ -27,7 +31,8 @@ const MiscTab = ({ data, loading }) => {
           <ul className="amendments-list">
             {item.amendments.map((amendment, index) => (
               <li key={index}>
-                <strong>Amendment {index + 1}:</strong> {amendment}
+                <strong>Amendment {index + 1}:</strong> 
+                <FormattedText text={amendment} maxSentences={2} />
               </li>
             ))}
           </ul>

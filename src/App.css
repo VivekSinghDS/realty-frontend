@@ -144,10 +144,12 @@
 .amendments-list li {
   margin-bottom: 0.5rem;
   color: #555;
+  line-height: 1.6;
 }
 
 .amendments-list strong {
   color: #2c3e50;
+  margin-right: 0.5rem;
 }
 
 /* Collapsible Section Styles */

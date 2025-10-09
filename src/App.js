@@ -15,7 +15,8 @@ function App() {
     info: null,
     space: null,
     chargeSchedules: null,
-    misc: null
+    misc: null,
+    executiveSummary: null
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -38,7 +39,7 @@ function App() {
   const renderActiveTab = () => {
     switch (activeTab) {
       case "info":
-        return <InfoTab data={analysisData.info} loading={loading} />;
+        return <InfoTab data={analysisData.info} executiveSummary={analysisData.executiveSummary} loading={loading} />;
       case "space":
         return <SpaceTab data={analysisData.space} loading={loading} />;
       case "charge-schedules":
