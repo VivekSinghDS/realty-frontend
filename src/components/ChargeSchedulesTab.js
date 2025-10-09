@@ -41,33 +41,103 @@ const ChargeSchedulesTab = ({ data, loading }) => {
     );
   };
 
-  const renderBaseRentItem = (item, index) => {
+  const renderBaseRentTable = (baseRentEntries) => {
+    if (!baseRentEntries || baseRentEntries.length === 0) return null;
+
     return (
-      <div key={index} className="base-rent-item">
-        <h4>Base Rent Entry {index + 1}</h4>
-        <div className="base-rent-grid">
-          {renderDataItem('Charge Code', item.chargeCode, `chargeCode-${index}`)}
-          {renderDataItem('Description', item.description, `description-${index}`)}
-          {renderDataItem('Date From', item.dateFrom, `dateFrom-${index}`)}
-          {renderDataItem('Date To', item.dateTo, `dateTo-${index}`)}
-          {renderDataItem('Monthly Amount', item.monthlyAmount, `monthlyAmount-${index}`)}
-          {renderDataItem('Annual Amount', item.annualAmount, `annualAmount-${index}`)}
-          {renderDataItem('Area Rentable', item.areaRentable, `areaRentable-${index}`)}
-          {renderDataItem('Amount Per Area', item.amountPerArea, `amountPerArea-${index}`)}
-          {renderDataItem('Management Fees', item.managementFees, `managementFees-${index}`)}
-        </div>
-        {item.amendments && item.amendments.length > 0 && (
-          <div className="amendments-section">
-            <h5>Amendments:</h5>
-            <ul className="amendments-list">
-              {item.amendments.map((amendment, amendIndex) => (
-                <li key={amendIndex}>
-                  <strong>Amendment {amendIndex + 1}:</strong> {amendment}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+      <div className="base-rent-table-container">
+        <table className="base-rent-table">
+          <thead>
+            <tr>
+              <th>Entry #</th>
+              <th>Charge Code</th>
+              <th>Description</th>
+              <th>Date From</th>
+              <th>Date To</th>
+              <th>Monthly Amount</th>
+              <th>Annual Amount</th>
+              <th>Area Rentable</th>
+              <th>Amount Per Area</th>
+              <th>Management Fees</th>
+              <th>Amendments</th>
+            </tr>
+          </thead>
+          <tbody>
+            {baseRentEntries.map((item, index) => (
+              <tr key={index} className="base-rent-row">
+                <td className="entry-number">{index + 1}</td>
+                <td className="table-cell">
+                  <FormattedText text={item.chargeCode?.value || 'N/A'} maxSentences={1} />
+                  {item.chargeCode?.citation && (
+                    <div className="table-citation">📄 {item.chargeCode.citation}</div>
+                  )}
+                </td>
+                <td className="table-cell">
+                  <FormattedText text={item.description?.value || 'N/A'} maxSentences={2} />
+                  {item.description?.citation && (
+                    <div className="table-citation">📄 {item.description.citation}</div>
+                  )}
+                </td>
+                <td className="table-cell">
+                  <FormattedText text={item.dateFrom?.value || 'N/A'} maxSentences={1} />
+                  {item.dateFrom?.citation && (
+                    <div className="table-citation">📄 {item.dateFrom.citation}</div>
+                  )}
+                </td>
+                <td className="table-cell">
+                  <FormattedText text={item.dateTo?.value || 'N/A'} maxSentences={1} />
+                  {item.dateTo?.citation && (
+                    <div className="table-citation">📄 {item.dateTo.citation}</div>
+                  )}
+                </td>
+                <td className="table-cell amount-cell">
+                  <span className="amount-value">{item.monthlyAmount?.value || 'N/A'}</span>
+                  {item.monthlyAmount?.citation && (
+                    <div className="table-citation">📄 {item.monthlyAmount.citation}</div>
+                  )}
+                </td>
+                <td className="table-cell amount-cell">
+                  <span className="amount-value">{item.annualAmount?.value || 'N/A'}</span>
+                  {item.annualAmount?.citation && (
+                    <div className="table-citation">📄 {item.annualAmount.citation}</div>
+                  )}
+                </td>
+                <td className="table-cell">
+                  <FormattedText text={item.areaRentable?.value || 'N/A'} maxSentences={1} />
+                  {item.areaRentable?.citation && (
+                    <div className="table-citation">📄 {item.areaRentable.citation}</div>
+                  )}
+                </td>
+                <td className="table-cell amount-cell">
+                  <span className="amount-value">{item.amountPerArea?.value || 'N/A'}</span>
+                  {item.amountPerArea?.citation && (
+                    <div className="table-citation">📄 {item.amountPerArea.citation}</div>
+                  )}
+                </td>
+                <td className="table-cell">
+                  <FormattedText text={item.managementFees?.value || 'N/A'} maxSentences={1} />
+                  {item.managementFees?.citation && (
+                    <div className="table-citation">📄 {item.managementFees.citation}</div>
+                  )}
+                </td>
+                <td className="amendments-cell">
+                  {item.amendments && item.amendments.length > 0 ? (
+                    <div className="amendments-inline">
+                      {item.amendments.map((amendment, amendIndex) => (
+                        <div key={amendIndex} className="amendment-item">
+                          <strong>Amendment {amendIndex + 1}:</strong>
+                          <FormattedText text={amendment} maxSentences={1} />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="no-amendments">None</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     );
   };
@@ -114,7 +184,7 @@ const ChargeSchedulesTab = ({ data, loading }) => {
             </button>
             {expandedSections.baseRent && (
               <div className="collapsible-content">
-                {chargeSchedules.baseRent.map((item, index) => renderBaseRentItem(item, index))}
+                {renderBaseRentTable(chargeSchedules.baseRent)}
               </div>
             )}
           </div>
