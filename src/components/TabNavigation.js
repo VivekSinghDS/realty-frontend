@@ -5,7 +5,8 @@ const TabNavigation = ({ activeTab, onTabChange }) => {
     { id: 'info', label: 'Lease Information & Executive Summary', icon: '📋' },
     { id: 'space', label: 'Space Details', icon: '🏢' },
     { id: 'charge-schedules', label: 'Charge Schedules', icon: '💰' },
-    { id: 'misc', label: 'Miscellaneous Provisions', icon: '📄' }
+    { id: 'misc', label: 'Miscellaneous Provisions', icon: '📄' },
+    { id: 'audit', label: 'Audit Checklist', icon: '🔍' }
   ];
 
   return (

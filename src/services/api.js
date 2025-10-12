@@ -1,5 +1,5 @@
-const API_BASE_URL = 'https://realty-lease-poc-6uti.onrender.com';
-// const API_BASE_URL = "http://localhost:8000";
+// const API_BASE_URL = 'https://realty-lease-poc-6uti.onrender.com';
+const API_BASE_URL = "http://localhost:8000";
 const uploadFile = async (file, endpoint) => {
   const formData = new FormData();
   formData.append('assets', file);
@@ -22,12 +22,13 @@ const uploadFile = async (file, endpoint) => {
 export const analyzeDocument = async (file) => {
   try {
     // Make all API calls in parallel
-    const [infoResponse, spaceResponse, chargeSchedulesResponse, miscResponse, executiveSummaryResponse] = await Promise.all([
+    const [infoResponse, spaceResponse, chargeSchedulesResponse, miscResponse, executiveSummaryResponse, auditResponse] = await Promise.all([
       uploadFile(file, '/debug/info'),
       uploadFile(file, '/debug/space'),
       uploadFile(file, '/debug/charge-schedules'),
       uploadFile(file, '/debug/misc'),
-      uploadFile(file, '/debug/executive-summary')
+      uploadFile(file, '/debug/executive-summary'),
+      uploadFile(file, '/debug/audit')
     ]);
 
     return {
@@ -35,7 +36,8 @@ export const analyzeDocument = async (file) => {
       space: spaceResponse,
       chargeSchedules: chargeSchedulesResponse,
       misc: miscResponse,
-      executiveSummary: executiveSummaryResponse
+      executiveSummary: executiveSummaryResponse,
+      audit: auditResponse
     };
   } catch (error) {
     console.error('Error analyzing document:', error);

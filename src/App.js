@@ -6,6 +6,8 @@ import InfoTab from "./components/InfoTab";
 import SpaceTab from "./components/SpaceTab";
 import ChargeSchedulesTab from "./components/ChargeSchedulesTab";
 import MiscTab from "./components/MiscTab";
+import AuditTab from "./components/AuditTab"
+
 import DownloadButton from "./components/DownloadButton";
 import { analyzeDocument } from "./services/api";
 
@@ -17,7 +19,8 @@ function App() {
     space: null,
     chargeSchedules: null,
     misc: null,
-    executiveSummary: null
+    executiveSummary: null,
+    audit: null
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -47,6 +50,8 @@ function App() {
         return <ChargeSchedulesTab data={analysisData.chargeSchedules} loading={loading} />;
       case "misc":
         return <MiscTab data={analysisData.misc} loading={loading} />;
+      case "audit":
+        return <AuditTab data={analysisData.audit} loading={loading}/>
       default:
         return <InfoTab data={analysisData.info} loading={loading} />;
     }
