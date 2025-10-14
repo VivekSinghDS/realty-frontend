@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FormattedText } from '../utils/textFormatter';
+import { FormattedText, AmendmentRenderer } from '../utils/textFormatter';
 import './MiscTab.css';
 import '../utils/textFormatter.css';
 
@@ -30,10 +30,7 @@ const MiscTab = ({ data, loading }) => {
         {item.amendments && item.amendments.length > 0 && (
           <ul className="amendments-list">
             {item.amendments.map((amendment, index) => (
-              <li key={index}>
-                <strong>Amendment {index + 1}:</strong> 
-                <FormattedText text={amendment} maxSentences={2} />
-              </li>
+              <AmendmentRenderer key={index} amendment={amendment} index={index} />
             ))}
           </ul>
         )}

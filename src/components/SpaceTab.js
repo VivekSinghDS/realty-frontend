@@ -1,4 +1,4 @@
-import { FormattedText } from '../utils/textFormatter';
+import { FormattedText, AmendmentRenderer } from '../utils/textFormatter';
 import './SpaceTab.css';
 import '../utils/textFormatter.css';
 
@@ -20,10 +20,7 @@ const SpaceTab = ({ data, loading }) => {
         {item.amendments && item.amendments.length > 0 && (
           <ul className="amendments-list">
             {item.amendments.map((amendment, index) => (
-              <li key={index}>
-                <strong>Amendment {index + 1}:</strong> 
-                <FormattedText text={amendment} maxSentences={2} />
-              </li>
+              <AmendmentRenderer key={index} amendment={amendment} index={index} />
             ))}
           </ul>
         )}

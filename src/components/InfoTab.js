@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FormattedText, extractExecutiveSummary } from '../utils/textFormatter';
+import { FormattedText, extractExecutiveSummary, AmendmentRenderer } from '../utils/textFormatter';
 import './InfoTab.css';
 import '../utils/textFormatter.css';
 
@@ -22,10 +22,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
         {item.amendments && item.amendments.length > 0 && (
           <ul className="amendments-list">
             {item.amendments.map((amendment, index) => (
-              <li key={index}>
-                <strong>Amendment {index + 1}:</strong> 
-                <FormattedText text={amendment} maxSentences={2} />
-              </li>
+              <AmendmentRenderer key={index} amendment={amendment} index={index} />
             ))}
           </ul>
         )}
@@ -98,10 +95,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
                             <h5>Amendments:</h5>
                             <ul className="amendments-list">
                               {summaryData.amendments.map((amendment, index) => (
-                                <li key={index}>
-                                  <strong>Amendment {index + 1}:</strong> 
-                                  <FormattedText text={amendment} maxSentences={2} />
-                                </li>
+                                <AmendmentRenderer key={index} amendment={amendment} index={index} />
                               ))}
                             </ul>
                           </div>

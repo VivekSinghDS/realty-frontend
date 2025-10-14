@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FormattedText } from '../utils/textFormatter';
+import { FormattedText, AmendmentRenderer } from '../utils/textFormatter';
 import './ChargeSchedulesTab.css';
 import '../utils/textFormatter.css';
 
@@ -30,10 +30,7 @@ const ChargeSchedulesTab = ({ data, loading }) => {
         {item.amendments && item.amendments.length > 0 && (
           <ul className="amendments-list">
             {item.amendments.map((amendment, index) => (
-              <li key={index}>
-                <strong>Amendment {index + 1}:</strong> 
-                <FormattedText text={amendment} maxSentences={2} />
-              </li>
+              <AmendmentRenderer key={index} amendment={amendment} index={index} />
             ))}
           </ul>
         )}
@@ -50,7 +47,6 @@ const ChargeSchedulesTab = ({ data, loading }) => {
           <thead>
             <tr>
               <th>Entry #</th>
-              <th>Charge Code</th>
               <th>Description</th>
               <th>Date From</th>
               <th>Date To</th>
@@ -58,7 +54,6 @@ const ChargeSchedulesTab = ({ data, loading }) => {
               <th>Annual Amount</th>
               <th>Area Rentable</th>
               <th>Amount Per Area</th>
-              <th>Management Fees</th>
               <th>Amendments</th>
             </tr>
           </thead>
@@ -66,12 +61,6 @@ const ChargeSchedulesTab = ({ data, loading }) => {
             {baseRentEntries.map((item, index) => (
               <tr key={index} className="base-rent-row">
                 <td className="entry-number">{index + 1}</td>
-                <td className="table-cell">
-                  <FormattedText text={item.chargeCode?.value || 'N/A'} maxSentences={1} />
-                  {item.chargeCode?.citation && (
-                    <div className="table-citation">📄 {item.chargeCode.citation}</div>
-                  )}
-                </td>
                 <td className="table-cell">
                   <FormattedText text={item.description?.value || 'N/A'} maxSentences={2} />
                   {item.description?.citation && (
@@ -114,20 +103,11 @@ const ChargeSchedulesTab = ({ data, loading }) => {
                     <div className="table-citation">📄 {item.amountPerArea.citation}</div>
                   )}
                 </td>
-                <td className="table-cell">
-                  <FormattedText text={item.managementFees?.value || 'N/A'} maxSentences={1} />
-                  {item.managementFees?.citation && (
-                    <div className="table-citation">📄 {item.managementFees.citation}</div>
-                  )}
-                </td>
                 <td className="amendments-cell">
                   {item.amendments && item.amendments.length > 0 ? (
                     <div className="amendments-inline">
                       {item.amendments.map((amendment, amendIndex) => (
-                        <div key={amendIndex} className="amendment-item">
-                          <strong>Amendment {amendIndex + 1}:</strong>
-                          <FormattedText text={amendment} maxSentences={1} />
-                        </div>
+                        <AmendmentRenderer key={amendIndex} amendment={amendment} index={amendIndex} />
                       ))}
                     </div>
                   ) : (

@@ -22,3 +22,70 @@
 .text-chunk:last-child {
   margin-bottom: 0;
 }
+
+/* Amendment styling */
+.amendment-item {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+}
+
+.amendment-header {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.amendment-type {
+  color: #007bff;
+  font-weight: normal;
+  margin-left: 0.25rem;
+}
+
+.amendment-date {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.amendment-citation {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.amendment-description {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.amendment-previous,
+.amendment-new {
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.amendment-previous strong,
+.amendment-new strong {
+  color: #d32f2f;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.amendment-new strong {
+  color: #2e7d32;
+}
+
+.amendments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+}
+
+.amendments-list .amendment-item {
+  margin-bottom: 0.75rem;
+}
+
+.amendments-list .amendment-item:last-child {
+  margin-bottom: 0;
+}
