@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FormattedText, AmendmentRenderer } from '../utils/textFormatter';
+import { AmendmentRenderer } from '../utils/textFormatter';
 import './MiscTab.css';
 import '../utils/textFormatter.css';
 
@@ -20,7 +20,7 @@ const MiscTab = ({ data, loading }) => {
       <div key={key} className="data-item">
         <span className="data-item-label">{label}:</span>
         <div className="data-item-value">
-          <FormattedText text={item.value || 'N/A'} maxSentences={2} />
+          {item.value || 'N/A'}
         </div>
         {item.citation && (
           <div className="data-item-citation">

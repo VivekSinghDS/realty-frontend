@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FormattedText, extractExecutiveSummary, AmendmentRenderer } from '../utils/textFormatter';
+import { extractExecutiveSummary, AmendmentRenderer } from '../utils/textFormatter';
 import './InfoTab.css';
 import '../utils/textFormatter.css';
 
@@ -12,7 +12,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
       <div key={key} className="data-item">
         <span className="data-item-label">{label}:</span>
         <div className="data-item-value">
-          <FormattedText text={item.value || 'N/A'} maxSentences={2} />
+          {item.value || 'N/A'}
         </div>
         {item.citation && (
           <div className="data-item-citation">
@@ -74,7 +74,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
                 const summaryData = extractExecutiveSummary(executiveSummary);
                 
                 if (typeof summaryData === 'string') {
-                  return <FormattedText text={summaryData} maxSentences={3} />;
+                  return <div>{summaryData}</div>;
                 }
                 
                 if (summaryData && summaryData.value) {
@@ -83,7 +83,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
                       <div className="summary-item">
                         <span className="summary-label">Summary:</span>
                         <div className="summary-value">
-                          <FormattedText text={summaryData.value || 'No summary available'} maxSentences={3} />
+                          {summaryData.value || 'No summary available'}
                         </div>
                         {summaryData.citation && (
                           <div className="summary-citation">
@@ -108,7 +108,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
                 // Fallback for unexpected data structure
                 return (
                   <div className="summary-fallback">
-                    <FormattedText text={JSON.stringify(executiveSummary, null, 2)} maxSentences={3} />
+                    {JSON.stringify(executiveSummary, null, 2)}
                   </div>
                 );
               })()}

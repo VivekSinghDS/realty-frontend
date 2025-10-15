@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FormattedText, AmendmentRenderer } from '../utils/textFormatter';
+import { AmendmentRenderer } from '../utils/textFormatter';
 import './ChargeSchedulesTab.css';
 import '../utils/textFormatter.css';
 
@@ -20,7 +20,7 @@ const ChargeSchedulesTab = ({ data, loading }) => {
       <div key={key} className="data-item">
         <span className="data-item-label">{label}:</span>
         <div className="data-item-value">
-          <FormattedText text={item.value || 'N/A'} maxSentences={2} />
+          {item.value || 'N/A'}
         </div>
         {item.citation && (
           <div className="data-item-citation">
@@ -62,19 +62,19 @@ const ChargeSchedulesTab = ({ data, loading }) => {
               <tr key={index} className="base-rent-row">
                 <td className="entry-number">{index + 1}</td>
                 <td className="table-cell">
-                  <FormattedText text={item.description?.value || 'N/A'} maxSentences={2} />
+                  {item.description?.value || 'N/A'}
                   {item.description?.citation && (
                     <div className="table-citation">📄 {item.description.citation}</div>
                   )}
                 </td>
                 <td className="table-cell">
-                  <FormattedText text={item.dateFrom?.value || 'N/A'} maxSentences={1} />
+                  {item.dateFrom?.value || 'N/A'}
                   {item.dateFrom?.citation && (
                     <div className="table-citation">📄 {item.dateFrom.citation}</div>
                   )}
                 </td>
                 <td className="table-cell">
-                  <FormattedText text={item.dateTo?.value || 'N/A'} maxSentences={1} />
+                  {item.dateTo?.value || 'N/A'}
                   {item.dateTo?.citation && (
                     <div className="table-citation">📄 {item.dateTo.citation}</div>
                   )}
@@ -92,7 +92,7 @@ const ChargeSchedulesTab = ({ data, loading }) => {
                   )}
                 </td>
                 <td className="table-cell">
-                  <FormattedText text={item.areaRentable?.value || 'N/A'} maxSentences={1} />
+                  {item.areaRentable?.value || 'N/A'}
                   {item.areaRentable?.citation && (
                     <div className="table-citation">📄 {item.areaRentable.citation}</div>
                   )}
