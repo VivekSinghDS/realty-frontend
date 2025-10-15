@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { FormattedText } from '../utils/textFormatter';
 import './AuditTab.css';
 import '../utils/textFormatter.css';
 
