@@ -3,7 +3,9 @@
   max-width: 1200px;
   margin: 0 auto;
   overflow-x: auto;
+  overflow-y: visible;
   width: 100%;
+  height: 100%;
 }
 
 .misc-section {

@@ -90,7 +90,6 @@ const DocumentSidebar = ({ company, onDocumentSelect, onUpload }) => {
 
   const handleDocumentClick = (document) => {
     selectDocument(document);
-    onDocumentSelect(document);
   };
 
   const openFileDialog = () => {

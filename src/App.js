@@ -27,6 +27,13 @@ function AppContent() {
   } = useDocument();
   
   const [activeTab, setActiveTab] = useState("info");
+
+  const handleTabChange = (tabId) => {
+    console.log('App: Tab change requested:', tabId);
+    console.log('App: Current activeTab:', activeTab);
+    setActiveTab(tabId);
+    console.log('App: Tab changed to:', tabId);
+  };
   const [showCompanySelector, setShowCompanySelector] = useState(!selectedCompany);
 
   const handleCompanySelect = (company) => {
@@ -131,7 +138,7 @@ function AppContent() {
                   <div className="analysis-controls">
                     <TabNavigation 
                       activeTab={activeTab}
-                      onTabChange={setActiveTab}
+                      onTabChange={handleTabChange}
                     />
                     <DownloadButton 
                       analysisData={analysisData}

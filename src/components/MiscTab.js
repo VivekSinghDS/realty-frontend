@@ -6,6 +6,11 @@ import '../utils/textFormatter.css';
 const MiscTab = ({ data, loading }) => {
   const [expandedSections, setExpandedSections] = useState({});
 
+  // Debug logging for amendment data
+  console.log('MiscTab received data:', data);
+  console.log('MiscTab data type:', typeof data);
+  console.log('MiscTab data keys:', data ? Object.keys(data) : 'no data');
+
   const toggleSection = (sectionKey) => {
     setExpandedSections(prev => ({
       ...prev,
@@ -16,11 +21,28 @@ const MiscTab = ({ data, loading }) => {
   const renderDataItem = (label, item, key) => {
     if (!item) return null;
     
+    // Handle different types of values
+    const renderValue = (value) => {
+      if (typeof value === 'object' && value !== null) {
+        // If it's an object, render it as a formatted list
+        return (
+          <div className="object-value">
+            {Object.entries(value).map(([key, val]) => (
+              <div key={key} className="object-entry">
+                <strong>{key}:</strong> {String(val)}
+              </div>
+            ))}
+          </div>
+        );
+      }
+      return String(value || 'N/A');
+    };
+    
     return (
       <div key={key} className="data-item">
         <span className="data-item-label">{label}:</span>
         <div className="data-item-value">
-          {item.value || 'N/A'}
+          {renderValue(item.value)}
         </div>
         {item.citation && (
           <div className="data-item-citation">

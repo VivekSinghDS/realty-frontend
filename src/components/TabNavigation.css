@@ -1,6 +1,8 @@
 .tab-navigation {
   margin: 2rem 0 1rem 0;
   border-bottom: 2px solid #e9ecef;
+  position: relative;
+  z-index: 10;
 }
 
 .tab-list {
@@ -8,6 +10,8 @@
   gap: 0.5rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
+  position: relative;
+  z-index: 10;
 }
 
 .tab-button {
@@ -26,6 +30,10 @@
   color: #6c757d;
   border-bottom: 3px solid transparent;
   min-width: fit-content;
+  pointer-events: auto;
+  z-index: 1;
+  position: relative;
+  user-select: none;
 }
 
 .tab-button:hover {

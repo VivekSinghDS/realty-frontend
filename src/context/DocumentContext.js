@@ -103,25 +103,45 @@ export const DocumentProvider = ({ children }) => {
           chargeSchedules: response.lease.chargeSchedules,
           otherLeaseProvisions: response.lease.otherLeaseProvisions,
           executiveSummary: response.lease.executiveSummary,
-          audit_items: response.lease.audit_items
+          audit_checklist: response.lease.audit_checklist || response.lease.audit_items
         };
         
         // Process amendments to include analysis data
-        const processedAmendments = (response.amendments || []).map((amendment, index) => ({
-          ...amendment,
-          id: `${companyId}_amendment_${index}`,
-          uid: `${companyId}_amendment_${index}`,
-          filename: `Amendment ${index + 1}`,
-          type: 'amendment',
-          createdAt: new Date().toISOString(),
-          // Include analysis data for amendments
-          leaseInformation: amendment.leaseInformation,
-          space: amendment.space,
-          chargeSchedules: amendment.chargeSchedules,
-          otherLeaseProvisions: amendment.otherLeaseProvisions,
-          executiveSummary: amendment.executiveSummary,
-          audit_items: amendment.audit_items
-        }));
+        const processedAmendments = (response.amendments || []).map((amendment, index) => {
+          console.log(`Processing amendment ${index}:`, amendment);
+          console.log(`Amendment keys:`, Object.keys(amendment));
+          console.log(`Amendment leaseInformation:`, amendment.leaseInformation);
+          console.log(`Amendment space:`, amendment.space);
+          
+          // Handle nested amendment data structure
+          // Amendment data is nested like: { space: { space: { unit: {...} } } }
+          // We need to extract the inner data
+          const extractNestedData = (data) => {
+            if (!data) return null;
+            // If data has a property with the same name as the parent, extract it
+            const keys = Object.keys(data);
+            if (keys.length === 1 && data[keys[0]] && typeof data[keys[0]] === 'object') {
+              return data[keys[0]];
+            }
+            return data;
+          };
+          
+          return {
+            ...amendment,
+            id: `${companyId}_amendment_${index}`,
+            uid: `${companyId}_amendment_${index}`,
+            filename: `Amendment ${index + 1}`,
+            type: 'amendment',
+            createdAt: new Date().toISOString(),
+            // Include analysis data for amendments with nested structure handling
+            leaseInformation: extractNestedData(amendment.leaseInformation),
+            space: extractNestedData(amendment.space),
+            chargeSchedules: extractNestedData(amendment.chargeSchedules),
+            otherLeaseProvisions: extractNestedData(amendment.otherLeaseProvisions),
+            executiveSummary: extractNestedData(amendment.executiveSummary),
+            audit_checklist: amendment.audit_checklist || amendment.audit_items
+          };
+        });
         
         const transformedHierarchy = [{
           lease: leaseWithBasicProps,
@@ -188,6 +208,9 @@ export const DocumentProvider = ({ children }) => {
       console.log('Selecting document:', document);
       console.log('Document type:', document.type);
       console.log('Document keys:', Object.keys(document));
+      console.log('Document leaseInformation:', document.leaseInformation);
+      console.log('Document space:', document.space);
+      console.log('Document chargeSchedules:', document.chargeSchedules);
       
       if (document.type === 'lease') {
         // For lease documents, create the structure that the UI components expect
@@ -197,18 +220,38 @@ export const DocumentProvider = ({ children }) => {
           chargeSchedules: document.chargeSchedules,
           misc: document.otherLeaseProvisions,
           executiveSummary: document.executiveSummary,
-          audit: document.audit_items
+          audit: document.audit_checklist || document.audit_items
         };
       } else if (document.type === 'amendment') {
         // For amendments, create the structure that the UI components expect
-        analysisData = {
-          info: document.leaseInformation,
-          space: document.space,
-          chargeSchedules: document.chargeSchedules,
-          misc: document.otherLeaseProvisions,
-          executiveSummary: document.executiveSummary,
-          audit: document.audit_items
+        console.log('Creating analysis data for amendment');
+        console.log('document.leaseInformation:', document.leaseInformation);
+        console.log('document.space:', document.space);
+        console.log('document.chargeSchedules:', document.chargeSchedules);
+        
+        // Handle nested amendment data structure
+        // Amendment data is nested like: { space: { space: { unit: {...} } } }
+        // We need to extract the inner data
+        const extractNestedData = (data) => {
+          if (!data) return null;
+          // If data has a property with the same name as the parent, extract it
+          const keys = Object.keys(data);
+          if (keys.length === 1 && data[keys[0]] && typeof data[keys[0]] === 'object') {
+            return data[keys[0]];
+          }
+          return data;
         };
+        
+        analysisData = {
+          info: extractNestedData(document.leaseInformation),
+          space: extractNestedData(document.space),
+          chargeSchedules: extractNestedData(document.chargeSchedules),
+          misc: extractNestedData(document.otherLeaseProvisions),
+          executiveSummary: extractNestedData(document.executiveSummary),
+          audit: document.audit_checklist || document.audit_items
+        };
+        
+        console.log('Created analysis data for amendment:', analysisData);
       }
       
       console.log('Created analysis data:', analysisData);
