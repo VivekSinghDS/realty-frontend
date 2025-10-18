@@ -143,7 +143,7 @@ const ChargeSchedulesTab = ({ data, loading }) => {
     );
   }
 
-  const chargeSchedules = data.chargeSchedules || {};
+  const chargeSchedules = data || {};
 
   return (
     <div className="tab-content-container">

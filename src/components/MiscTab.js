@@ -90,7 +90,7 @@ const MiscTab = ({ data, loading }) => {
     );
   }
 
-  const otherLeaseProvisions = data.otherLeaseProvisions || {};
+  const otherLeaseProvisions = data || {};
 
   const provisionSections = [
     { key: 'premisesAndTerm', title: 'Premises and Term', data: otherLeaseProvisions.premisesAndTerm },

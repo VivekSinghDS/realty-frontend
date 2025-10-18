@@ -2,6 +2,8 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  overflow-x: auto;
+  width: 100%;
 }
 
 .misc-section {
@@ -38,6 +40,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
+  min-width: 600px;
 }
 
 .loading-state {

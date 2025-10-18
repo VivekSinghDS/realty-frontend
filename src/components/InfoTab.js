@@ -51,7 +51,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
     );
   }
 
-  const leaseInfo = data.leaseInformation || {};
+  const leaseInfo = data || {};
 
   return (
     <div className="tab-content-container">

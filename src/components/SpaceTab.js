@@ -49,7 +49,7 @@ const SpaceTab = ({ data, loading }) => {
     );
   }
 
-  const spaceData = data.space || {};
+  const spaceData = data || {};
 
   return (
     <div className="tab-content-container">

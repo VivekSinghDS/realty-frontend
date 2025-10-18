@@ -26,7 +26,7 @@ const AuditTab = ({ data, loading }) => {
     );
   }
 
-  const auditChecklist = data.audit_checklist || [];
+  const auditChecklist = data || [];
 
   const toggleExpanded = (index) => {
     const newExpanded = new Set(expandedItems);
