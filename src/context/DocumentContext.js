@@ -178,7 +178,6 @@ export const DocumentProvider = ({ children }) => {
       dispatch({ type: 'SET_LOADING', payload: true });
       const result = await documentApi.analyzeDocument(companyId, file, documentType);
       console.log('this was the result, biki biki bow bow', result)
-      // Add the analyzed document to the list
       
       // Set the analysis data
       if (result.analysisData) {
@@ -186,8 +185,11 @@ export const DocumentProvider = ({ children }) => {
       }
       if (result.document) {
         dispatch({ type: 'ADD_DOCUMENT', payload: result.document });
-        dispatch({ type: 'SET_SELECTED_DOCUMENT', payload: result.document }); // 👈 add this line
+        dispatch({ type: 'SET_SELECTED_DOCUMENT', payload: result.document });
       }
+      
+      // Refresh the document hierarchy to show the newly analyzed document in the sidebar
+      await loadDocumentHierarchy(companyId);
       
       return result;
     } catch (error) {
