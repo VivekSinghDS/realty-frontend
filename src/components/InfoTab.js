@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { extractExecutiveSummary, AmendmentRenderer } from '../utils/textFormatter';
+import { extractExecutiveSummary, AmendmentRenderer, renderContent } from '../utils/textFormatter';
 import './InfoTab.css';
 import '../utils/textFormatter.css';
 
@@ -7,7 +7,6 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
 
   const renderDataItem = (label, item, key) => {
     if (!item) return null;
-    console.log(data, 'olton twon')
     // Handle different types of values
     const renderValue = (value) => {
       if (typeof value === 'object' && value !== null) {
@@ -16,13 +15,13 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
           <div className="object-value">
             {Object.entries(value).map(([key, val]) => (
               <div key={key} className="object-entry">
-                <strong>{key}:</strong> {String(val)}
+                <strong>{key}:</strong> {renderContent(val)}
               </div>
             ))}
           </div>
         );
       }
-      return String(value || 'N/A');
+      return renderContent(value || 'N/A');
     };
     
     return (
@@ -100,7 +99,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
                       <div className="summary-item">
                         <span className="summary-label">Summary:</span>
                         <div className="summary-value">
-                          {summaryData.value || 'No summary available'}
+                          {renderContent(summaryData.value || 'No summary available')}
                         </div>
                         {summaryData.citation && (
                           <div className="summary-citation">

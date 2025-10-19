@@ -1,4 +1,6 @@
 
+import MarkdownRenderer from '../components/MarkdownRenderer';
+
 // Helper function to extract executive summary data
 export const extractExecutiveSummary = (data) => {
   if (!data) return null;
@@ -31,6 +33,24 @@ export const extractExecutiveSummary = (data) => {
   return data;
 };
 
+// Helper function to render content that might be Markdown
+export const renderContent = (content, className = '') => {
+  if (!content) return null;
+  
+  // If content is a string, check if it looks like Markdown
+  if (typeof content === 'string') {
+    return <MarkdownRenderer content={content} className={className} />;
+  }
+  
+  // If content is an object with a value property, render the value
+  if (content.value) {
+    return <MarkdownRenderer content={content.value} className={className} />;
+  }
+  
+  // For other object types, stringify and render
+  return <MarkdownRenderer content={String(content)} className={className} />;
+};
+
 // Component to render amendment objects properly
 export const AmendmentRenderer = ({ amendment, index }) => {
   if (!amendment || typeof amendment !== 'object') {
@@ -57,13 +77,22 @@ export const AmendmentRenderer = ({ amendment, index }) => {
       
       {description && (
         <div className="amendment-description">
-          <strong>Description:</strong> {description}
+          <strong>Description:</strong> 
+          {renderContent(description)}
         </div>
       )}
       
       {previous_value && (
         <div className="amendment-previous">
-          <strong>Previous Value:</strong> {previous_value}
+          <strong>Previous Value:</strong> 
+          {renderContent(previous_value)}
+        </div>
+      )}
+      
+      {new_value && (
+        <div className="amendment-new">
+          <strong>New Value:</strong> 
+          {renderContent(new_value)}
         </div>
       )}
     </li>

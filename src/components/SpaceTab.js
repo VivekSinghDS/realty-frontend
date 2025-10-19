@@ -1,4 +1,4 @@
-import { AmendmentRenderer } from '../utils/textFormatter';
+import { AmendmentRenderer, renderContent } from '../utils/textFormatter';
 import './SpaceTab.css';
 import '../utils/textFormatter.css';
 
@@ -14,13 +14,13 @@ const SpaceTab = ({ data, loading }) => {
           <div className="object-value">
             {Object.entries(value).map(([key, val]) => (
               <div key={key} className="object-entry">
-                <strong>{key}:</strong> {String(val)}
+                <strong>{key}:</strong> {renderContent(val)}
               </div>
             ))}
           </div>
         );
       }
-      return String(value || 'N/A');
+      return renderContent(value || 'N/A');
     };
     
     return (

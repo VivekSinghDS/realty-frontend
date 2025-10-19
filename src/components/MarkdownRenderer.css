@@ -1,0 +1,228 @@
+/* Markdown Content Styling */
+.markdown-content {
+  line-height: 1.6;
+  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+/* Headers */
+.markdown-h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1.5rem 0 1rem 0;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 0.5rem;
+}
+
+.markdown-h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.75rem 0;
+  color: #34495e;
+  border-bottom: 1px solid #bdc3c7;
+  padding-bottom: 0.25rem;
+}
+
+.markdown-h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem 0;
+  color: #34495e;
+}
+
+.markdown-h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.5rem 0;
+  color: #34495e;
+}
+
+.markdown-h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+  color: #34495e;
+}
+
+.markdown-h6 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+  color: #7f8c8d;
+}
+
+/* Paragraphs */
+.markdown-p {
+  margin: 0.75rem 0;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+/* Lists */
+.markdown-ul, .markdown-ol {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+}
+
+.markdown-li {
+  margin: 0.25rem 0;
+  line-height: 1.6;
+}
+
+/* Blockquotes */
+.markdown-blockquote {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid #3498db;
+  background-color: #f8f9fa;
+  color: #555;
+  font-style: italic;
+}
+
+/* Code */
+.markdown-inline-code {
+  background-color: #f1f2f6;
+  color: #e74c3c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+}
+
+.markdown-pre {
+  background-color: #2d3748;
+  color: #e2e8f0;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 1rem 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.markdown-code-block {
+  background-color: #2d3748;
+  color: #e2e8f0;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+/* Tables */
+.markdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.markdown-thead {
+  background-color: #f8f9fa;
+}
+
+.markdown-th {
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+  color: #495057;
+}
+
+.markdown-td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+  vertical-align: top;
+}
+
+.markdown-tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.markdown-tr:hover {
+  background-color: #e9ecef;
+}
+
+/* Links */
+.markdown-link {
+  color: #3498db;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.markdown-link:hover {
+  color: #2980b9;
+  border-bottom-color: #2980b9;
+}
+
+/* Text formatting */
+.markdown-strong {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.markdown-em {
+  font-style: italic;
+  color: #34495e;
+}
+
+/* Horizontal rules */
+.markdown-hr {
+  border: none;
+  height: 2px;
+  background-color: #bdc3c7;
+  margin: 2rem 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .markdown-h1 {
+    font-size: 1.75rem;
+  }
+  
+  .markdown-h2 {
+    font-size: 1.35rem;
+  }
+  
+  .markdown-h3 {
+    font-size: 1.15rem;
+  }
+  
+  .markdown-table {
+    font-size: 0.9rem;
+  }
+  
+  .markdown-th,
+  .markdown-td {
+    padding: 0.5rem;
+  }
+}
+
+/* Integration with existing data-item styles */
+.data-item .markdown-content {
+  margin: 0;
+}
+
+.data-item-value .markdown-content {
+  margin: 0;
+}
+
+/* Executive summary specific styling */
+.executive-summary .markdown-content {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 6px;
+  border-left: 4px solid #3498db;
+}
+
+/* Amendment content styling */
+.amendment-description .markdown-content,
+.amendment-previous .markdown-content {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}

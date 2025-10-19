@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { renderContent } from '../utils/textFormatter';
 import './AuditTab.css';
 import '../utils/textFormatter.css';
 
@@ -106,14 +107,14 @@ const AuditTab = ({ data, loading }) => {
                   <div className="audit-section">
                     <h4>Issue Description</h4>
                     <div className="audit-text">
-                      {item.issue_description}
+                      {renderContent(item.issue_description)}
                     </div>
                   </div>
 
                   <div className="audit-section">
                     <h4>Affected Clause</h4>
                     <div className="audit-text">
-                      {item.affected_clause}
+                      {renderContent(item.affected_clause)}
                     </div>
                   </div>
 
@@ -133,7 +134,7 @@ const AuditTab = ({ data, loading }) => {
                   <div className="audit-section">
                     <h4>Recommended Action</h4>
                     <div className="audit-text">
-                      {item.recommended_action}
+                      {renderContent(item.recommended_action)}
                     </div>
                   </div>
                 </div>

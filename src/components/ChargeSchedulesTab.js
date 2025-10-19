@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AmendmentRenderer } from '../utils/textFormatter';
+import { AmendmentRenderer, renderContent } from '../utils/textFormatter';
 import './ChargeSchedulesTab.css';
 import '../utils/textFormatter.css';
 
@@ -20,7 +20,7 @@ const ChargeSchedulesTab = ({ data, loading }) => {
       <div key={key} className="data-item">
         <span className="data-item-label">{label}:</span>
         <div className="data-item-value">
-          {item.value || 'N/A'}
+          {renderContent(item.value || 'N/A')}
         </div>
         {item.citation && (
           <div className="data-item-citation">
