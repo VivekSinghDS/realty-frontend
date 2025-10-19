@@ -7,7 +7,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
 
   const renderDataItem = (label, item, key) => {
     if (!item) return null;
-    
+    console.log(data, 'olton twon')
     // Handle different types of values
     const renderValue = (value) => {
       if (typeof value === 'object' && value !== null) {

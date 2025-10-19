@@ -19,10 +19,10 @@ const DownloadButton = ({ analysisData, uploadedFileName, disabled = false }) =>
   };
 
   const hasData = analysisData && (
-    analysisData.info || 
+    analysisData.leaseInformation || 
     analysisData.space || 
     analysisData.chargeSchedules || 
-    analysisData.misc || 
+    analysisData.otherLeaseProvisions || 
     analysisData.executiveSummary
   );
 

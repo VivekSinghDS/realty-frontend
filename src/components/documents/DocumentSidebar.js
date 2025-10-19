@@ -74,8 +74,7 @@ const DocumentSidebar = ({ company, onDocumentSelect, onUpload }) => {
 
     try {
       const metadata = {
-        type: documentType,
-        parentId: documentType === 'amendment' && parentLeaseId ? parseInt(parentLeaseId) : null
+        type: documentType
       };
 
       await onUpload(uploadFile, metadata);
@@ -204,33 +203,12 @@ const DocumentSidebar = ({ company, onDocumentSelect, onUpload }) => {
                 </select>
               </div>
               
-              {documentType === 'amendment' && (
-                <div className="form-group">
-                  <label htmlFor="parent-lease">Parent Lease:</label>
-                  <select
-                    id="parent-lease"
-                    value={parentLeaseId}
-                    onChange={(e) => setParentLeaseId(e.target.value)}
-                    className="parent-lease-select"
-                  >
-                    <option value="">Select parent lease...</option>
-                    {documents
-                      .filter(doc => doc.type === 'lease')
-                      .map(doc => (
-                        <option key={doc.id} value={doc.id}>
-                          {doc.filename}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-              )}
             </div>
             
             <div className="modal-actions">
               <button
                 onClick={handleUpload}
                 className="upload-btn"
-                disabled={documentType === 'amendment' && !parentLeaseId}
               >
                 Upload & Analyze
               </button>

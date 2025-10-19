@@ -60,16 +60,16 @@ function AppContent() {
     
     console.log('Rendering tab with analysisData:', analysisData);
     console.log('Selected document:', selectedDocument);
-    console.log('analysisData.info:', analysisData?.info);
+    console.log('analysisData.info:', analysisData?.leaseInformation);
     console.log('analysisData.space:', analysisData?.space);
     console.log('analysisData.chargeSchedules:', analysisData?.chargeSchedules);
-    console.log('analysisData.misc:', analysisData?.misc);
+    console.log('analysisData.misc:', analysisData?.otherLeaseProvisions);
     console.log('analysisData.executiveSummary:', analysisData?.executiveSummary);
     
     switch (activeTab) {
       case "info":
         return <InfoTab 
-          data={analysisData?.info} 
+          data={analysisData?.leaseInformation} 
           executiveSummary={analysisData?.executiveSummary} 
           loading={loading} 
         />;
@@ -78,11 +78,11 @@ function AppContent() {
       case "charge-schedules":
         return <ChargeSchedulesTab data={analysisData?.chargeSchedules} loading={loading} />;
       case "misc":
-        return <MiscTab data={analysisData?.misc} loading={loading} />;
+        return <MiscTab data={analysisData?.otherLeaseProvisions} loading={loading} />;
       case "audit":
-        return <AuditTab data={analysisData?.audit} loading={loading}/>
+        return <AuditTab data={analysisData?.audit_items} loading={loading}/>
       default:
-        return <InfoTab data={analysisData?.info} loading={loading} />;
+        return <InfoTab data={analysisData?.leaseInformation} loading={loading} />;
     }
   };
 

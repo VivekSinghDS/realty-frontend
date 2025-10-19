@@ -93,7 +93,6 @@ export const DocumentProvider = ({ children }) => {
         const leaseWithBasicProps = {
           ...response.lease,
           id: `${companyId}`,
-          uid: `${companyId}`,
           filename: `${companyId} Lease Document`,
           type: 'lease',
           createdAt: new Date().toISOString(),
@@ -178,15 +177,16 @@ export const DocumentProvider = ({ children }) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       const result = await documentApi.analyzeDocument(companyId, file, documentType);
-      
+      console.log('this was the result, biki biki bow bow', result)
       // Add the analyzed document to the list
-      if (result.document) {
-        dispatch({ type: 'ADD_DOCUMENT', payload: result.document });
-      }
       
       // Set the analysis data
       if (result.analysisData) {
         dispatch({ type: 'SET_ANALYSIS_DATA', payload: result.analysisData });
+      }
+      if (result.document) {
+        dispatch({ type: 'ADD_DOCUMENT', payload: result.document });
+        dispatch({ type: 'SET_SELECTED_DOCUMENT', payload: result.document }); // 👈 add this line
       }
       
       return result;
@@ -215,12 +215,12 @@ export const DocumentProvider = ({ children }) => {
       if (document.type === 'lease') {
         // For lease documents, create the structure that the UI components expect
         analysisData = {
-          info: document.leaseInformation,
+          leaseInformation: document.leaseInformation,
           space: document.space,
           chargeSchedules: document.chargeSchedules,
-          misc: document.otherLeaseProvisions,
+          otherLeaseProvisions: document.otherLeaseProvisions,
           executiveSummary: document.executiveSummary,
-          audit: document.audit_checklist || document.audit_items
+          audit_items: document.audit_checklist || document.audit_items
         };
       } else if (document.type === 'amendment') {
         // For amendments, create the structure that the UI components expect
