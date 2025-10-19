@@ -1,5 +1,4 @@
-// const API_BASE_URL = "http://localhost:8000";
-const API_BASE_URL = 'https://realty-lease-poc-6uti.onrender.com';
+const API_BASE_URL = process.env.REACT_APP_DEV === 'true' ? "http://localhost:8000" : 'https://realty-lease-poc-6uti.onrender.com';
 
 // Company management API functions
 export const companyApi = {

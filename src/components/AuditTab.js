@@ -84,23 +84,23 @@ const AuditTab = ({ data, loading }) => {
         <div className="audit-checklist">
           {auditChecklist.map((item, index) => (
             <div key={index} className="audit-item">
-              <div 
+              <button 
                 className="audit-item-header"
                 onClick={() => toggleExpanded(index)}
               >
+                <span className={`expand-icon ${expandedItems.has(index) ? 'expanded' : ''}`}>
+                  ▶
+                </span>
                 <div className="audit-item-title">
-                  <span className="certainty-indicator" style={{ color: getCertaintyColor(item.certainty_level) }}>
+                  {/* <span className="certainty-indicator" style={{ color: getCertaintyColor(item.certainty_level) }}>
                     {getCertaintyIcon(item.certainty_level)}
-                  </span>
+                  </span> */}
                   <h3>{item.category}</h3>
                   <span className="certainty-badge" style={{ backgroundColor: getCertaintyColor(item.certainty_level) }}>
                     {item.certainty_level}
                   </span>
                 </div>
-                <div className="expand-icon">
-                  {expandedItems.has(index) ? '▼' : '▶'}
-                </div>
-              </div>
+              </button>
 
               {expandedItems.has(index) && (
                 <div className="audit-item-details">
