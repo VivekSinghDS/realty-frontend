@@ -243,12 +243,12 @@ export const DocumentProvider = ({ children }) => {
         };
         
         analysisData = {
-          info: extractNestedData(document.leaseInformation),
+          leaseInformation: extractNestedData(document.leaseInformation),
           space: extractNestedData(document.space),
           chargeSchedules: extractNestedData(document.chargeSchedules),
-          misc: extractNestedData(document.otherLeaseProvisions),
+          otherLeaseProvisions: extractNestedData(document.otherLeaseProvisions),
           executiveSummary: extractNestedData(document.executiveSummary),
-          audit: document.audit_checklist || document.audit_items
+          audit_items: document.audit_checklist || document.audit_items
         };
         
         console.log('Created analysis data for amendment:', analysisData);

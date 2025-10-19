@@ -85,6 +85,25 @@ function AppContent() {
         return <InfoTab data={analysisData?.leaseInformation} loading={loading} />;
     }
   };
+  // switch (activeTab) {
+  //     case "info":
+  //       return <InfoTab 
+  //         data={selectedDocument?.leaseInformation} 
+  //         executiveSummary={selectedDocument?.executiveSummary} 
+  //         loading={loading} 
+  //       />;
+  //     case "space":
+  //       return <SpaceTab data={selectedDocument?.space} loading={loading} />;
+  //     case "charge-schedules":
+  //       return <ChargeSchedulesTab data={selectedDocument?.chargeSchedules} loading={loading} />;
+  //     case "misc":
+  //       return <MiscTab data={selectedDocument?.otherLeaseProvisions} loading={loading} />;
+  //     case "audit":
+  //       return <AuditTab data={selectedDocument?.audit_items} loading={loading}/>
+  //     default:
+  //       return <InfoTab data={selectedDocument?.leaseInformation} loading={loading} />;
+  //   }
+  // };
 
   if (showCompanySelector) {
     return (
