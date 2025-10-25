@@ -89,7 +89,12 @@ const CompanySelector = ({ onCompanySelect }) => {
             className="create-company-btn"
             disabled={loading}
           >
-            {showCreateForm ? 'Cancel' : '+ Create New Company'}
+            {showCreateForm ? 'Cancel' : (
+              <>
+                {/* <span class="plus-icon">+</span> */}
+                <span>Create New Company</span>
+              </>
+            )}
           </button>
         </div>
       </div>

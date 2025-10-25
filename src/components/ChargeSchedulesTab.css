@@ -19,10 +19,16 @@
   padding-bottom: 0.75rem;
   border-bottom: 3px solid #3498db;
   font-weight: 600;
+  margin: auto;
+  width: 80%;
+  text-align: center;
+  
 }
 
 .schedule-section {
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
+  padding-top: 1rem;
+  margin: auto
 }
 
 /* Base Rent Table Styles */

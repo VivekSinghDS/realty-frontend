@@ -147,17 +147,17 @@ const MiscTab = ({ data, loading }) => {
 
   return (
     <div className="tab-content-container">
-      <div className="misc-section">
-        <h2 className="section-title">Miscellaneous Provisions</h2>
-        <p className="section-description">
+      <div className="misc-header">
+        <h2>Miscellaneous Provisions</h2>
+        <p>
           Click on any provision below to view detailed information extracted from the lease document.
         </p>
-        
-        <div className="provisions-list">
-          {provisionSections.map(({ key, title, data }) => 
-            renderProvisionSection(key, data, title)
-          )}
-        </div>
+      </div>
+      
+      <div className="provisions-list">
+        {provisionSections.map(({ key, title, data }) => 
+          renderProvisionSection(key, data, title)
+        )}
       </div>
     </div>
   );
