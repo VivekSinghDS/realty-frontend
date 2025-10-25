@@ -96,9 +96,9 @@ const AuditTab = ({ data, loading }) => {
                     {getCertaintyIcon(item.certainty_level)}
                   </span> */}
                   <h3>{item.category}</h3>
-                  <span className="certainty-badge" style={{ backgroundColor: getCertaintyColor(item.certainty_level) }}>
+                  {/* <span className="certainty-badge" style={{ backgroundColor: getCertaintyColor(item.certainty_level) }}>
                     {item.certainty_level}
-                  </span>
+                  </span> */}
                 </div>
               </button>
 

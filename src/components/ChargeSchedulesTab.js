@@ -148,7 +148,7 @@ const ChargeSchedulesTab = ({ data, loading }) => {
   return (
     <div className="tab-content-container">
       <div className="charge-schedules-section">
-        <h2 className="section-title">💰 Charge Schedules</h2>
+        <h2 className="section-title">Charge Schedules</h2>
         
         {/* Base Rent Section */}
         {chargeSchedules.baseRent && chargeSchedules.baseRent.length > 0 && (

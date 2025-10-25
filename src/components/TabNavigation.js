@@ -2,11 +2,11 @@ import './TabNavigation.css';
 
 const TabNavigation = ({ activeTab, onTabChange }) => {
   const tabs = [
-    { id: 'info', label: 'Lease Information & Executive Summary', icon: '📋' },
-    { id: 'space', label: 'Space Details', icon: '🏢' },
-    { id: 'charge-schedules', label: 'Charge Schedules', icon: '💰' },
-    { id: 'misc', label: 'Miscellaneous Provisions', icon: '📄' },
-    { id: 'audit', label: 'Audit Checklist', icon: '🔍' }
+    { id: 'info', label: 'Lease Information', icon: '' },
+    { id: 'space', label: 'Space', icon: '' },
+    { id: 'charge-schedules', label: 'Charge Schedules', icon: '' },
+    { id: 'misc', label: 'Lease Provisions', icon: '' },
+    { id: 'audit', label: 'Audit', icon: '' }
   ];
 
   const handleTabClick = (tabId) => {
@@ -30,7 +30,6 @@ const TabNavigation = ({ activeTab, onTabChange }) => {
               position: 'relative'
             }}
           >
-            <span className="tab-icon">{tab.icon}</span>
             <span className="tab-label">{tab.label}</span>
           </button>
         ))}

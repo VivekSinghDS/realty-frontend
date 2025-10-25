@@ -32,7 +32,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
         </div>
         {item.citation && (
           <div className="data-item-citation">
-            📄 Citation: {item.citation}
+            Citation: {item.citation}
           </div>
         )}
         {item.amendments && item.amendments.length > 0 && (
@@ -72,7 +72,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
   return (
     <div className="tab-content-container">
       <div className="info-section">
-        <h2 className="section-title">📋 Lease Information</h2>
+        <h2 className="section-title">Lease Information</h2>
         <div className="info-grid">
           {renderDataItem('Lease', leaseInfo.lease, 'lease')}
           {renderDataItem('Property', leaseInfo.property, 'property')}
@@ -82,7 +82,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
       </div>
 
       <div className="executive-summary-section">
-        <h2 className="section-title">📊 Executive Summary</h2>
+        <h2 className="section-title">Executive Summary</h2>
         <div className="summary-content">
           {executiveSummary ? (
             <div className="summary-data">
@@ -103,7 +103,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
                         </div>
                         {summaryData.citation && (
                           <div className="summary-citation">
-                            📄 Citation: {summaryData.citation}
+                            Citation: {summaryData.citation}
                           </div>
                         )}
                         {summaryData.amendments && summaryData.amendments.length > 0 && (

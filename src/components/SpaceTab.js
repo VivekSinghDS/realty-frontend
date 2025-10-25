@@ -71,7 +71,7 @@ const SpaceTab = ({ data, loading }) => {
   return (
     <div className="tab-content-container">
       <div className="space-section">
-        <h2 className="section-title">🏢 Space Details</h2>
+        <h2 className="section-title">Space Details</h2>
         <div className="space-grid">
           {renderDataItem('Unit', spaceData.unit, 'unit')}
           {renderDataItem('Building', spaceData.building, 'building')}

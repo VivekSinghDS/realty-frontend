@@ -124,15 +124,14 @@ function AppContent() {
       <header className="app-header">
         <div className="header-content">
           <div className="header-title">
-            <h1>Lease Abstract</h1>
-            <p>Managing documents for {selectedCompany?.name}</p>
+            <h1>Lease Abstraction</h1>
           </div>
-          <button 
+          {/* <button 
             className="change-company-btn"
             onClick={() => setShowCompanySelector(true)}
           >
             Change Company
-          </button>
+          </button> */}
         </div>
       </header>
 
@@ -148,12 +147,12 @@ function AppContent() {
             {selectedDocument ? (
               <>
                 <div className="analysis-header">
-                  <div className="document-header">
-                    <h2>{selectedDocument.filename}</h2>
-                    <span className="document-type-badge">
+                  {/* <div className="document-header"> */}
+                    {/* <h2>{selectedDocument.filename}</h2> */}
+                    {/* <span className="document-type-badge">
                       {selectedDocument.type === 'lease' ? 'Lease Agreement' : 'Amendment'}
-                    </span>
-                  </div>
+                    </span> */}
+                  {/* </div> */}
                   <div className="analysis-controls">
                     <TabNavigation 
                       activeTab={activeTab}
