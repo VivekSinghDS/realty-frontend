@@ -83,7 +83,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
 
       <div className="executive-summary-section">
         <h2 className="section-title">Executive Summary</h2>
-        <div className="summary-content">
+        {/* <div className="summary-content"> */}
           {executiveSummary ? (
             <div className="summary-data">
               {(() => {
@@ -134,7 +134,7 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
               <p>Executive summary will be displayed here once available.</p>
             </div>
           )}
-        </div>
+        {/* </div> */}
       </div>
     </div>
   );

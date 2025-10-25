@@ -16,7 +16,8 @@
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
   padding-bottom: 0.75rem;
-  border-bottom: 3px solid #3498db;
+  border-bottom: 1px solid;
+  border-image: linear-gradient(135deg, #d1d9ff 0%, #e1d9ff 100%) 1;
   font-weight: 600;
 }
 
@@ -57,6 +58,8 @@
   border-radius: 8px;
   padding: 1.5rem;
   border: 1px solid #e9ecef;
+  gap: 1.5rem;
+  margin: auto;
 }
 
 .summary-item {
