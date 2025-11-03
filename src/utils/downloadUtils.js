@@ -1,4 +1,6 @@
 // Utility functions for downloading analysis results
+import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } from 'docx';
+import { saveAs } from 'file-saver';
 
 export const formatDataForText = (analysisData, uploadedFileName) => {
   try {
@@ -222,4 +224,401 @@ export const downloadTextFile = (content, filename) => {
   link.click();
   document.body.removeChild(link);
   window.URL.revokeObjectURL(url);
+};
+
+// DOCX formatting functions
+export const formatDataForDocx = async (analysisData, uploadedFileName) => {
+  try {
+    const timestamp = new Date().toLocaleString();
+    const fileName = uploadedFileName || 'lease-document';
+    
+    const children = [];
+    
+    // Title page
+    children.push(
+      new Paragraph({
+        text: "LEASE ANALYSIS REPORT",
+        heading: HeadingLevel.TITLE,
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 400 },
+      }),
+      new Paragraph({
+        children: [
+          new TextRun({ text: `Generated: ${timestamp}`, bold: true }),
+        ],
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 200 },
+      }),
+      new Paragraph({
+        children: [
+          new TextRun({ text: `Document: ${fileName}` }),
+        ],
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 600 },
+      }),
+    );
+
+    // Executive Summary
+    if (analysisData.executiveSummary) {
+      let summaryText = '';
+      if (typeof analysisData.executiveSummary === 'string') {
+        summaryText = analysisData.executiveSummary;
+      } else if (analysisData.executiveSummary.value) {
+        summaryText = analysisData.executiveSummary.value;
+      } else if (analysisData.executiveSummary.executiveSummary && analysisData.executiveSummary.executiveSummary.value) {
+        summaryText = analysisData.executiveSummary.executiveSummary.value;
+      } else {
+        summaryText = formatTextValue(analysisData.executiveSummary);
+      }
+      
+      const cleanedSummary = formatTextValue(summaryText);
+      // Split by newlines and create paragraphs
+      const summaryParagraphs = cleanedSummary.split('\n').filter(p => p.trim());
+      
+      children.push(
+        new Paragraph({
+          text: "Executive Summary",
+          heading: HeadingLevel.HEADING_1,
+          spacing: { before: 400, after: 200 },
+        }),
+      );
+      
+      summaryParagraphs.forEach(para => {
+        children.push(
+          new Paragraph({
+            text: para,
+            spacing: { after: 120 },
+          })
+        );
+      });
+    }
+
+    // Lease Information
+    const leaseInfo = analysisData.leaseInformation || analysisData.info?.leaseInformation;
+    if (leaseInfo) {
+      children.push(
+        new Paragraph({
+          text: "Lease Information",
+          heading: HeadingLevel.HEADING_1,
+          spacing: { before: 400, after: 200 },
+        }),
+      );
+      Object.entries(leaseInfo).forEach(([key, value]) => {
+        if (value && (value.value !== undefined && value.value !== null)) {
+          const formattedValue = formatTextValue(value.value);
+          
+          children.push(
+            new Paragraph({
+              children: [
+                new TextRun({ text: `${formatLabel(key)}: `, bold: true }),
+                new TextRun({ text: formattedValue }),
+              ],
+              spacing: { after: 100 },
+            }),
+          );
+          
+          if (value.citation) {
+            children.push(
+              new Paragraph({
+                children: [
+                  new TextRun({ text: `  Citation: ${formatTextValue(value.citation)}`, italics: true }),
+                ],
+                spacing: { after: 100 },
+              }),
+            );
+          }
+          
+          if (value.amendments && Array.isArray(value.amendments) && value.amendments.length > 0) {
+            value.amendments.forEach((amendment, index) => {
+              children.push(
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: `  Amendment ${index + 1}: ${formatTextValue(amendment)}`, italics: true }),
+                  ],
+                  spacing: { after: 100 },
+                }),
+              );
+            });
+          }
+        }
+      });
+    }
+
+    // Space Information
+    const spaceDataRaw = analysisData.space;
+    const spaceData = spaceDataRaw?.space || spaceDataRaw;
+    if (spaceData) {
+      children.push(
+        new Paragraph({
+          text: "Space Information",
+          heading: HeadingLevel.HEADING_1,
+          spacing: { before: 400, after: 200 },
+        }),
+      );
+      Object.entries(spaceData).forEach(([key, value]) => {
+        if (value && (value.value !== undefined && value.value !== null)) {
+          const formattedValue = formatTextValue(value.value);
+          
+          children.push(
+            new Paragraph({
+              children: [
+                new TextRun({ text: `${formatLabel(key)}: `, bold: true }),
+                new TextRun({ text: formattedValue }),
+              ],
+              spacing: { after: 100 },
+            }),
+          );
+          
+          if (value.citation) {
+            children.push(
+              new Paragraph({
+                children: [
+                  new TextRun({ text: `  Citation: ${formatTextValue(value.citation)}`, italics: true }),
+                ],
+                spacing: { after: 100 },
+              }),
+            );
+          }
+          
+          if (value.amendments && Array.isArray(value.amendments) && value.amendments.length > 0) {
+            value.amendments.forEach((amendment, index) => {
+              children.push(
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: `  Amendment ${index + 1}: ${formatTextValue(amendment)}`, italics: true }),
+                  ],
+                  spacing: { after: 100 },
+                }),
+              );
+            });
+          }
+        }
+      });
+    }
+
+    // Charge Schedules
+    const chargeSchedulesRaw = analysisData.chargeSchedules;
+    const chargeSchedules = chargeSchedulesRaw?.chargeSchedules || chargeSchedulesRaw;
+    if (chargeSchedules) {
+      children.push(
+        new Paragraph({
+          text: "Charge Schedules",
+          heading: HeadingLevel.HEADING_1,
+          spacing: { before: 400, after: 200 },
+        }),
+      );
+      
+      // Base Rent Entries
+      if (chargeSchedules.baseRent && chargeSchedules.baseRent.length > 0) {
+        children.push(
+          new Paragraph({
+            text: "Base Rent Entries",
+            heading: HeadingLevel.HEADING_2,
+            spacing: { before: 300, after: 200 },
+          }),
+        );
+        
+        chargeSchedules.baseRent.forEach((entry, index) => {
+          children.push(
+            new Paragraph({
+              children: [
+                new TextRun({ text: `Entry ${index + 1}`, bold: true }),
+              ],
+              spacing: { before: 200, after: 150 },
+            }),
+          );
+          
+          const fields = [
+            'chargeCode', 'description', 'dateFrom', 'dateTo',
+            'monthlyAmount', 'annualAmount', 'areaRentable', 
+            'amountPerArea', 'managementFees'
+          ];
+          
+          fields.forEach(field => {
+            if (entry[field] && (entry[field].value !== undefined && entry[field].value !== null)) {
+              const formattedValue = formatTextValue(entry[field].value);
+              children.push(
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: `${formatLabel(field)}: `, bold: true }),
+                    new TextRun({ text: formattedValue }),
+                  ],
+                  spacing: { after: 100 },
+                }),
+              );
+              
+              if (entry[field].citation) {
+                children.push(
+                  new Paragraph({
+                    children: [
+                      new TextRun({ text: `  Citation: ${formatTextValue(entry[field].citation)}`, italics: true }),
+                    ],
+                    spacing: { after: 100 },
+                  }),
+                );
+              }
+            }
+          });
+          
+          if (entry.amendments && Array.isArray(entry.amendments) && entry.amendments.length > 0) {
+            children.push(
+              new Paragraph({
+                children: [
+                  new TextRun({ text: "Amendments:", bold: true }),
+                ],
+                spacing: { before: 100, after: 100 },
+              }),
+            );
+            entry.amendments.forEach((amendment, amendIndex) => {
+              children.push(
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: `  Amendment ${amendIndex + 1}: ${formatTextValue(amendment)}`, italics: true }),
+                  ],
+                  spacing: { after: 100 },
+                }),
+              );
+            });
+          }
+        });
+      }
+      
+      // Late Fee Information
+      if (chargeSchedules.lateFee) {
+        children.push(
+          new Paragraph({
+            text: "Late Fee Information",
+            heading: HeadingLevel.HEADING_2,
+            spacing: { before: 300, after: 200 },
+          }),
+        );
+        
+        const lateFeeFields = [
+          'calculationType', 'graceDays', 'percent', 'secondFeeCalculationType',
+          'secondFeeGrace', 'secondFeePercent', 'perDayFee'
+        ];
+        
+        lateFeeFields.forEach(field => {
+          if (chargeSchedules.lateFee[field] && (chargeSchedules.lateFee[field].value !== undefined && chargeSchedules.lateFee[field].value !== null)) {
+            const formattedValue = formatTextValue(chargeSchedules.lateFee[field].value);
+            children.push(
+              new Paragraph({
+                children: [
+                  new TextRun({ text: `${formatLabel(field)}: `, bold: true }),
+                  new TextRun({ text: formattedValue }),
+                ],
+                spacing: { after: 100 },
+              }),
+            );
+            
+            if (chargeSchedules.lateFee[field].citation) {
+              children.push(
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: `  Citation: ${formatTextValue(chargeSchedules.lateFee[field].citation)}`, italics: true }),
+                  ],
+                  spacing: { after: 100 },
+                }),
+              );
+            }
+          }
+        });
+      }
+    }
+
+    // Miscellaneous Information (Other Lease Provisions)
+    const miscData = analysisData.otherLeaseProvisions || analysisData.misc;
+    if (miscData) {
+      children.push(
+        new Paragraph({
+          text: "Miscellaneous Information",
+          heading: HeadingLevel.HEADING_1,
+          spacing: { before: 400, after: 200 },
+        }),
+      );
+      
+      Object.entries(miscData).forEach(([sectionKey, sectionData]) => {
+        if (sectionData && typeof sectionData === 'object') {
+          children.push(
+            new Paragraph({
+              children: [
+                new TextRun({ text: formatLabel(sectionKey), bold: true }),
+              ],
+              spacing: { before: 200, after: 150 },
+            }),
+          );
+          
+          Object.entries(sectionData).forEach(([key, value]) => {
+            if (value && (value.value !== undefined && value.value !== null)) {
+              const formattedValue = formatTextValue(value.value);
+              children.push(
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: `  ${formatLabel(key)}: `, bold: true }),
+                    new TextRun({ text: formattedValue }),
+                  ],
+                  spacing: { after: 100 },
+                }),
+              );
+              
+              if (value.citation) {
+                children.push(
+                  new Paragraph({
+                    children: [
+                      new TextRun({ text: `    Citation: ${formatTextValue(value.citation)}`, italics: true }),
+                    ],
+                    spacing: { after: 100 },
+                  }),
+                );
+              }
+              
+              if (value.amendments && Array.isArray(value.amendments) && value.amendments.length > 0) {
+                value.amendments.forEach((amendment, index) => {
+                  children.push(
+                    new Paragraph({
+                      children: [
+                        new TextRun({ text: `    Amendment ${index + 1}: ${formatTextValue(amendment)}`, italics: true }),
+                      ],
+                      spacing: { after: 100 },
+                    }),
+                  );
+                });
+              }
+            }
+          });
+        }
+      });
+    }
+
+    // End of report
+    children.push(
+      new Paragraph({
+        text: "End of Report",
+        alignment: AlignmentType.CENTER,
+        spacing: { before: 400, after: 200 },
+      }),
+    );
+
+    const doc = new Document({
+      sections: [{
+        children: children,
+      }],
+    });
+
+    return doc;
+  } catch (error) {
+    console.error('Error formatting data for DOCX:', error);
+    throw new Error(`Failed to format data: ${error.message}`);
+  }
+};
+
+export const downloadDocxFile = async (doc, filename) => {
+  try {
+    const blob = await Packer.toBlob(doc);
+    const fileName = `${filename}-analysis-${new Date().toISOString().split('T')[0]}.docx`;
+    saveAs(blob, fileName);
+  } catch (error) {
+    console.error('Error downloading DOCX file:', error);
+    throw new Error(`Failed to download document: ${error.message}`);
+  }
 };
