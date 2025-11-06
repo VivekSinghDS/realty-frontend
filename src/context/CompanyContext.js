@@ -89,6 +89,11 @@ export const CompanyProvider = ({ children }) => {
     dispatch({ type: 'SET_SELECTED_COMPANY', payload: company });
   };
 
+  // Clear selected company
+  const clearSelectedCompany = () => {
+    dispatch({ type: 'SET_SELECTED_COMPANY', payload: null });
+  };
+
   // Update company
   const updateCompany = async (companyId, companyData) => {
     try {
@@ -124,6 +129,7 @@ export const CompanyProvider = ({ children }) => {
     loadCompanies,
     createCompany,
     selectCompany,
+    clearSelectedCompany,
     updateCompany,
     deleteCompany,
     clearError

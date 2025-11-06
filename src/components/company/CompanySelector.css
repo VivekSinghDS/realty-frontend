@@ -236,10 +236,45 @@
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
 }
 
+.company-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  gap: 1rem;
+}
+
 .company-info-card h3 {
   color: #2d3748;
-  margin-bottom: 0.5rem;
+  margin: 0;
   font-size: 1.2rem;
+  flex: 1;
+}
+
+.back-button {
+  background: #e2e8f0;
+  color: #4a5568;
+  border: 2px solid #cbd5e0;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.back-button:hover {
+  background: #cbd5e0;
+  border-color: #a0aec0;
+  transform: translateX(-2px);
+}
+
+.back-button:active {
+  transform: translateX(0);
 }
 
 .company-info-card p {
@@ -262,5 +297,16 @@
   .submit-btn,
   .cancel-btn {
     width: 100%;
+  }
+
+  .company-info-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .back-button {
+    width: 100%;
+    justify-content: center;
   }
 }

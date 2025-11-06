@@ -16,7 +16,7 @@ import { useDocument } from "./context/DocumentContext";
 
 // Main content component that uses the contexts
 function AppContent() {
-  const { selectedCompany } = useCompany();
+  const { selectedCompany, clearSelectedCompany } = useCompany();
   const { 
     selectedDocument, 
     analysisData, 
@@ -38,6 +38,11 @@ function AppContent() {
 
   const handleCompanySelect = (company) => {
     setShowCompanySelector(false);
+  };
+
+  const handleBackToCompanySelection = () => {
+    clearSelectedCompany();
+    setShowCompanySelector(true);
   };
 
   const handleDocumentSelect = (document) => {
@@ -126,12 +131,25 @@ function AppContent() {
           <div className="header-title">
             <h1>Lease Abstraction</h1>
           </div>
-          {/* <button 
-            className="change-company-btn"
-            onClick={() => setShowCompanySelector(true)}
+          <button 
+            className="back-to-company-btn"
+            onClick={handleBackToCompanySelection}
+            title="Back to company selection"
           >
-            Change Company
-          </button> */}
+            <svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </button>
         </div>
       </header>
 

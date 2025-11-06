@@ -3,7 +3,7 @@ import { useCompany } from '../../context/CompanyContext';
 import './CompanySelector.css';
 
 const CompanySelector = ({ onCompanySelect }) => {
-  const { companies, selectedCompany, loading, error, createCompany, selectCompany } = useCompany();
+  const { companies, selectedCompany, loading, error, createCompany, selectCompany, clearSelectedCompany } = useCompany();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newCompanyName, setNewCompanyName] = useState('');
   const [isCreating, setIsCreating] = useState(false);
@@ -142,7 +142,22 @@ const CompanySelector = ({ onCompanySelect }) => {
       {selectedCompany && (
         <div className="selected-company-info">
           <div className="company-info-card">
-            <h3>{selectedCompany.name}</h3>
+            <div className="company-info-header">
+              <h3>{selectedCompany.name}</h3>
+              <button
+                type="button"
+                onClick={() => {
+                  clearSelectedCompany();
+                  if (onCompanySelect) {
+                    onCompanySelect(null);
+                  }
+                }}
+                className="back-button"
+                title="Back to company selection"
+              >
+                ← Back
+              </button>
+            </div>
             <p>Company ID: {selectedCompany.id}</p>
             <p>Company UID: {selectedCompany.uid}</p>
             {selectedCompany.createdAt && (
