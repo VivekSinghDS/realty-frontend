@@ -16,6 +16,12 @@
   letter-spacing: 0.5px;
 }
 
+.download-button-icon-only {
+  padding: 0.75rem;
+  min-width: 44px;
+  justify-content: center;
+}
+
 .download-button:hover:not(.disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);

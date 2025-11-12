@@ -32,7 +32,7 @@ const DownloadButton = ({ analysisData, uploadedFileName, disabled = false }) =>
 
   return (
     <button 
-      className={`download-button ${disabled ? 'disabled' : ''}`}
+      className={`download-button download-button-icon-only ${disabled ? 'disabled' : ''}`}
       onClick={handleDownload}
       disabled={disabled}
       title="Download analysis results as Word document"
@@ -42,7 +42,6 @@ const DownloadButton = ({ analysisData, uploadedFileName, disabled = false }) =>
         <polyline points="7,10 12,15 17,10"/>
         <line x1="12" y1="15" x2="12" y2="3"/>
       </svg>
-      Download Report
     </button>
   );
 };

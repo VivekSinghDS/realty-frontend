@@ -2,11 +2,12 @@ import './TabNavigation.css';
 
 const TabNavigation = ({ activeTab, onTabChange }) => {
   const tabs = [
-    { id: 'info', label: 'Lease Information', icon: '' },
+    { id: 'info', label: 'Info', icon: '' },
     { id: 'space', label: 'Space', icon: '' },
-    { id: 'charge-schedules', label: 'Charge Schedules', icon: '' },
-    { id: 'misc', label: 'Lease Provisions', icon: '' },
-    { id: 'audit', label: 'Audit', icon: '' }
+    { id: 'charge-schedules', label: 'Rent Schedules', icon: '' },
+    { id: 'misc', label: 'Provisions', icon: '' },
+    { id: 'audit', label: 'Audit', icon: '' },
+    { id: 'cam', label: 'CAM', icon: '' }
   ];
 
   const handleTabClick = (tabId) => {

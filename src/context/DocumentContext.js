@@ -43,7 +43,13 @@ const documentReducer = (state, action) => {
     case 'CLEAR_ERROR':
       return { ...state, error: null };
     case 'CLEAR_DOCUMENTS':
-      return { ...state, documents: [], selectedDocument: null, analysisData: null };
+      return { ...state, documents: [], selectedDocument: null, analysisData: null, camData: null, uploadedFile: null };
+    case 'SET_CAM_LOADING':
+      return { ...state, camLoading: action.payload };
+    case 'SET_CAM_DATA':
+      return { ...state, camData: action.payload, camLoading: false };
+    case 'SET_UPLOADED_FILE':
+      return { ...state, uploadedFile: action.payload };
     default:
       return state;
   }
@@ -54,7 +60,10 @@ const initialState = {
   documents: [],
   selectedDocument: null,
   analysisData: null,
+  camData: null,
+  camLoading: false,
   documentHierarchy: [],
+  uploadedFile: null, // Store the uploaded file for CAM API calls
   loading: false,
   error: null
 };
@@ -176,6 +185,8 @@ export const DocumentProvider = ({ children }) => {
   const analyzeDocument = async (companyId, file, documentType = 'lease') => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
+      // Store the file for later CAM API calls
+      dispatch({ type: 'SET_UPLOADED_FILE', payload: file });
       const result = await documentApi.analyzeDocument(companyId, file, documentType);
       console.log('this was the result, biki biki bow bow', result)
       
@@ -332,6 +343,20 @@ export const DocumentProvider = ({ children }) => {
     dispatch({ type: 'CLEAR_ERROR' });
   };
 
+  // Load CAM data (lazy loading)
+  const loadCamData = async (companyId, file) => {
+    try {
+      dispatch({ type: 'SET_CAM_LOADING', payload: true });
+      const camData = await documentApi.getCamData(companyId, file);
+      dispatch({ type: 'SET_CAM_DATA', payload: camData });
+      return camData;
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload: error.message });
+      dispatch({ type: 'SET_CAM_LOADING', payload: false });
+      throw error;
+    }
+  };
+
   const value = {
     ...state,
     loadDocuments,
@@ -344,7 +369,8 @@ export const DocumentProvider = ({ children }) => {
     linkAmendment,
     searchDocuments,
     clearDocuments,
-    clearError
+    clearError,
+    loadCamData
   };
 
   return (

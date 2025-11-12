@@ -10,6 +10,7 @@ import SpaceTab from "./components/SpaceTab";
 import ChargeSchedulesTab from "./components/ChargeSchedulesTab";
 import MiscTab from "./components/MiscTab";
 import AuditTab from "./components/AuditTab";
+import CamTab from "./components/CamTab";
 import DownloadButton from "./components/DownloadButton";
 import { useCompany } from "./context/CompanyContext";
 import { useDocument } from "./context/DocumentContext";
@@ -20,18 +21,32 @@ function AppContent() {
   const { 
     selectedDocument, 
     analysisData, 
+    camData,
+    camLoading,
+    uploadedFile,
     loading, 
     error,
     analyzeDocument,
-    uploadDocument 
+    uploadDocument,
+    loadCamData
   } = useDocument();
   
   const [activeTab, setActiveTab] = useState("info");
 
-  const handleTabChange = (tabId) => {
+  const handleTabChange = async (tabId) => {
     console.log('App: Tab change requested:', tabId);
     console.log('App: Current activeTab:', activeTab);
     setActiveTab(tabId);
+    
+    // Lazy load CAM data when CAM tab is clicked
+    if (tabId === 'cam' && !camData && !camLoading && uploadedFile && selectedCompany?.uid) {
+      try {
+        await loadCamData(selectedCompany.uid, uploadedFile);
+      } catch (error) {
+        console.error('Failed to load CAM data:', error);
+      }
+    }
+    
     console.log('App: Tab changed to:', tabId);
   };
   const [showCompanySelector, setShowCompanySelector] = useState(!selectedCompany);
@@ -86,6 +101,8 @@ function AppContent() {
         return <MiscTab data={analysisData?.otherLeaseProvisions} loading={loading} />;
       case "audit":
         return <AuditTab data={analysisData?.audit_items} loading={loading}/>
+      case "cam":
+        return <CamTab data={camData} loading={camLoading} />
       default:
         return <InfoTab data={analysisData?.leaseInformation} loading={loading} />;
     }

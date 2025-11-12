@@ -175,6 +175,7 @@
 .analysis-controls {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   overflow-x: auto;
   flex-wrap: nowrap;
@@ -187,6 +188,16 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.analysis-controls > .tab-navigation {
+  flex: 1;
+  min-width: 0;
+}
+
+.analysis-controls > .download-button {
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 /* Webkit browsers scrollbar styling */
