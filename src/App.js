@@ -23,12 +23,10 @@ function AppContent() {
     analysisData, 
     camData,
     camLoading,
-    uploadedFile,
     loading, 
     error,
     analyzeDocument,
-    uploadDocument,
-    loadCamData
+    uploadDocument
   } = useDocument();
   
   const [activeTab, setActiveTab] = useState("info");
@@ -37,16 +35,6 @@ function AppContent() {
     console.log('App: Tab change requested:', tabId);
     console.log('App: Current activeTab:', activeTab);
     setActiveTab(tabId);
-    
-    // Lazy load CAM data when CAM tab is clicked
-    if (tabId === 'cam' && !camData && !camLoading && uploadedFile && selectedCompany?.uid) {
-      try {
-        await loadCamData(selectedCompany.uid, uploadedFile);
-      } catch (error) {
-        console.error('Failed to load CAM data:', error);
-      }
-    }
-    
     console.log('App: Tab changed to:', tabId);
   };
   const [showCompanySelector, setShowCompanySelector] = useState(!selectedCompany);

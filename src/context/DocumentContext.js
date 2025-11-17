@@ -202,6 +202,15 @@ export const DocumentProvider = ({ children }) => {
       // Refresh the document hierarchy to show the newly analyzed document in the sidebar
       await loadDocumentHierarchy(companyId);
       
+      // Clear previous CAM data and trigger CAM data loading in parallel (fire and forget - don't wait for it)
+      // This allows the UI to render analyze results immediately while CAM processes in background
+      dispatch({ type: 'SET_CAM_DATA', payload: null }); // Clear previous CAM data
+      dispatch({ type: 'SET_CAM_LOADING', payload: true }); // Set loading state
+      loadCamData(companyId, file, documentType).catch(error => {
+        console.error('Failed to load CAM data in background:', error);
+        // Error is already handled in loadCamData, so we just log it here
+      });
+      
       return result;
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: error.message });
@@ -344,10 +353,12 @@ export const DocumentProvider = ({ children }) => {
   };
 
   // Load CAM data (lazy loading)
-  const loadCamData = async (companyId, file) => {
+  const loadCamData = async (companyId, file, documentType = 'lease') => {
     try {
       dispatch({ type: 'SET_CAM_LOADING', payload: true });
-      const camData = await documentApi.getCamData(companyId, file);
+      const response = await documentApi.getCamData(companyId, file, documentType);
+      // Extract the 'cam' property from the response if it exists
+      const camData = response.cam || response;
       dispatch({ type: 'SET_CAM_DATA', payload: camData });
       return camData;
     } catch (error) {

@@ -10,7 +10,8 @@ const CamTab = ({ data, loading }) => {
       <div className="tab-content-container">
         <div className="loading-state">
           <div className="spinner"></div>
-          <p>Loading CAM Provisions...</p>
+          <p>CAM Data is still being processed...</p>
+          <p className="loading-hint">This may take a few moments. The analysis results are already available in other tabs.</p>
         </div>
       </div>
     );
@@ -117,10 +118,13 @@ const CamTab = ({ data, loading }) => {
     return 'neutral';
   };
 
+  // Handle nested response structure (backward compatibility)
+  const camData = data?.cam || data;
+
   // Group rules by category
   const rulesByCategory = {};
-  if (data.allExtractedRules) {
-    data.allExtractedRules.forEach(rule => {
+  if (camData.allExtractedRules) {
+    camData.allExtractedRules.forEach(rule => {
       const category = rule.ruleCategory;
       if (!rulesByCategory[category]) {
         rulesByCategory[category] = [];
@@ -129,7 +133,7 @@ const CamTab = ({ data, loading }) => {
     });
   }
 
-  const summary = data.cumulativeCamRulesSummary || {};
+  const summary = camData.cumulativeCamRulesSummary || {};
   const riskAssessment = summary.riskAssessment || {};
   const rulesByCategoryCount = summary.rulesByCategory || {};
 
@@ -140,9 +144,9 @@ const CamTab = ({ data, loading }) => {
   const exposures = riskAssessment.keyTenantExposures?.length || 0;
 
   // Get base year and controllable cap
-  const baseYearRule = data.allExtractedRules?.find(r => r.ruleCategory === 'baseYearProvisions');
+  const baseYearRule = camData.allExtractedRules?.find(r => r.ruleCategory === 'baseYearProvisions');
   const baseYear = baseYearRule?.exactLanguage?.match(/20\d{2}/)?.[0] || 'N/A';
-  const controllableCapRule = data.allExtractedRules?.find(r => r.ruleCategory === 'capsLimitations');
+  const controllableCapRule = camData.allExtractedRules?.find(r => r.ruleCategory === 'capsLimitations');
   const controllableCap = controllableCapRule?.exactLanguage?.match(/(\d+)%/)?.[1] || 'N/A';
 
   return (
