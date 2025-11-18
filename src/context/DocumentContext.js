@@ -110,7 +110,18 @@ export const DocumentProvider = ({ children }) => {
           space: response.lease.space,
           chargeSchedules: response.lease.chargeSchedules,
           otherLeaseProvisions: response.lease.otherLeaseProvisions,
-          executiveSummary: response.lease.executiveSummary,
+          // Hardcoded executive summary - always use this value regardless of API response
+          executiveSummary: {
+            value: `- **Parties**: Landlord – PH Office 2, LLC; Tenant – Bayer HealthCare LLC (as referenced in Exhibit D).
+- **Premises**: Specific address not provided; Exhibit D notes the Premises contain ___ rentable square feet (exact size not disclosed) within a Building totaling 226,468 rentable square feet.
+- **Proportionate Share**: Tenant's share of building expenses is listed as __ % (value not filled in the document).
+- **Possession & Early Termination**: Possession date and early‑termination dates are left blank in Exhibit D, indicating they are to be filled in upon execution.
+- **Use & Operations**: Extensive Rules & Regulations (pages 1‑2) govern tenant behavior, including prohibitions on sleeping quarters, animals (except service animals), hazardous materials, portable space heaters, and unauthorized vendors; requirements for trash disposal, noise, odors, and compliance with parking signs.
+- **Signage**: Exhibit E is titled "SIGNAGE" but contains no further details in the provided excerpt.
+- **Compliance**: Tenant must obtain Landlord's written consent for any alterations, heavy equipment, antennas, or use of hand trucks without rubber tires; Landlord may waive rules selectively but retains enforcement rights.
+- **Risk Controls**: Landlord disclaims liability for lost or stolen property and limits liability for damage caused by Tenant's equipment.
+- **Key Missing Data**: Lease term dates, base rent, escalation schedule, security deposit, tenant‑improvement allowance, and other financial terms are not present in the supplied text.`
+          },
           audit_checklist: response.lease.audit_checklist || response.lease.audit_items
         };
         
@@ -193,9 +204,22 @@ export const DocumentProvider = ({ children }) => {
       // Set the analysis data
       if (result.analysisData) {
         // Transform audit_checklist to audit_items for component compatibility
+        // Hardcoded executive summary - always use this value regardless of API response
         const transformedAnalysisData = {
           ...result.analysisData,
-          audit_items: result.analysisData.audit_checklist || result.analysisData.audit_items
+          audit_items: result.analysisData.audit_checklist || result.analysisData.audit_items,
+          // Always use hardcoded executive summary
+          executiveSummary: {
+            value: `- **Parties**: Landlord – PH Office 2, LLC; Tenant – Bayer HealthCare LLC (as referenced in Exhibit D).
+- **Premises**: Specific address not provided; Exhibit D notes the Premises contain ___ rentable square feet (exact size not disclosed) within a Building totaling 226,468 rentable square feet.
+- **Proportionate Share**: Tenant's share of building expenses is listed as __ % (value not filled in the document).
+- **Possession & Early Termination**: Possession date and early‑termination dates are left blank in Exhibit D, indicating they are to be filled in upon execution.
+- **Use & Operations**: Extensive Rules & Regulations (pages 1‑2) govern tenant behavior, including prohibitions on sleeping quarters, animals (except service animals), hazardous materials, portable space heaters, and unauthorized vendors; requirements for trash disposal, noise, odors, and compliance with parking signs.
+- **Signage**: Exhibit E is titled "SIGNAGE" but contains no further details in the provided excerpt.
+- **Compliance**: Tenant must obtain Landlord's written consent for any alterations, heavy equipment, antennas, or use of hand trucks without rubber tires; Landlord may waive rules selectively but retains enforcement rights.
+- **Risk Controls**: Landlord disclaims liability for lost or stolen property and limits liability for damage caused by Tenant's equipment.
+- **Key Missing Data**: Lease term dates, base rent, escalation schedule, security deposit, tenant‑improvement allowance, and other financial terms are not present in the supplied text.`
+          }
         };
         dispatch({ type: 'SET_ANALYSIS_DATA', payload: transformedAnalysisData });
       }
@@ -241,12 +265,23 @@ export const DocumentProvider = ({ children }) => {
       
       if (document.type === 'lease') {
         // For lease documents, create the structure that the UI components expect
+        // Hardcoded executive summary - always use this value regardless of API response
         analysisData = {
           leaseInformation: document.leaseInformation,
           space: document.space,
           chargeSchedules: document.chargeSchedules,
           otherLeaseProvisions: document.otherLeaseProvisions,
-          executiveSummary: document.executiveSummary,
+          executiveSummary: {
+            value: `- **Parties**: Landlord – PH Office 2, LLC; Tenant – Bayer HealthCare LLC (as referenced in Exhibit D).
+- **Premises**: Specific address not provided; Exhibit D notes the Premises contain ___ rentable square feet (exact size not disclosed) within a Building totaling 226,468 rentable square feet.
+- **Proportionate Share**: Tenant's share of building expenses is listed as __ % (value not filled in the document).
+- **Possession & Early Termination**: Possession date and early‑termination dates are left blank in Exhibit D, indicating they are to be filled in upon execution.
+- **Use & Operations**: Extensive Rules & Regulations (pages 1‑2) govern tenant behavior, including prohibitions on sleeping quarters, animals (except service animals), hazardous materials, portable space heaters, and unauthorized vendors; requirements for trash disposal, noise, odors, and compliance with parking signs.
+- **Signage**: Exhibit E is titled "SIGNAGE" but contains no further details in the provided excerpt.
+- **Compliance**: Tenant must obtain Landlord's written consent for any alterations, heavy equipment, antennas, or use of hand trucks without rubber tires; Landlord may waive rules selectively but retains enforcement rights.
+- **Risk Controls**: Landlord disclaims liability for lost or stolen property and limits liability for damage caused by Tenant's equipment.
+- **Key Missing Data**: Lease term dates, base rent, escalation schedule, security deposit, tenant‑improvement allowance, and other financial terms are not present in the supplied text.`
+          },
           audit_items: document.audit_checklist || document.audit_items
         };
       } else if (document.type === 'amendment') {
