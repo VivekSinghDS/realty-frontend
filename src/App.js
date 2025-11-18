@@ -17,7 +17,7 @@ import { useDocument } from "./context/DocumentContext";
 
 // Main content component that uses the contexts
 function AppContent() {
-  const { selectedCompany, clearSelectedCompany } = useCompany();
+  const { selectedCompany, clearSelectedCompany, deleteCompany, loadCompanies } = useCompany();
   const { 
     selectedDocument, 
     analysisData, 
@@ -30,6 +30,8 @@ function AppContent() {
   } = useDocument();
   
   const [activeTab, setActiveTab] = useState("info");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleTabChange = async (tabId) => {
     console.log('App: Tab change requested:', tabId);
@@ -46,6 +48,34 @@ function AppContent() {
   const handleBackToCompanySelection = () => {
     clearSelectedCompany();
     setShowCompanySelector(true);
+  };
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedCompany?.uid) return;
+    
+    try {
+      setIsDeleting(true);
+      await deleteCompany(selectedCompany.uid);
+      // Reload companies list to refresh the UI
+      await loadCompanies();
+      // Redirect to company selection page after successful deletion
+      clearSelectedCompany();
+      setShowCompanySelector(true);
+      setShowDeleteConfirm(false);
+    } catch (error) {
+      console.error('Error deleting company:', error);
+      alert('Failed to delete company. Please try again.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
   };
 
   const handleDocumentSelect = (document) => {
@@ -136,27 +166,75 @@ function AppContent() {
           <div className="header-title">
             <h1>Lease Abstraction</h1>
           </div>
-          <button 
-            className="back-to-company-btn"
-            onClick={handleBackToCompanySelection}
-            title="Back to company selection"
-          >
-            <svg 
-              width="20" 
-              height="20" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
+          <div className="header-actions">
+            <button 
+              className="back-to-company-btn"
+              onClick={handleBackToCompanySelection}
+              title="Back to company selection"
             >
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-          </button>
+              <svg 
+                width="20" 
+                height="20" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </button>
+            <button 
+              className="delete-company-btn"
+              onClick={handleDeleteClick}
+              title="Delete company"
+              disabled={isDeleting}
+            >
+              <svg 
+                width="20" 
+                height="20" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              >
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
         </div>
       </header>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="modal-overlay" onClick={handleDeleteCancel}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Delete Company</h2>
+            <p>Are you sure you want to delete this company? This action cannot be undone.</p>
+            <div className="modal-actions">
+              <button 
+                className="modal-btn modal-btn-cancel" 
+                onClick={handleDeleteCancel}
+                disabled={isDeleting}
+              >
+                Cancel
+              </button>
+              <button 
+                className="modal-btn modal-btn-confirm" 
+                onClick={handleDeleteConfirm}
+                disabled={isDeleting}
+              >
+                {isDeleting ? 'Deleting...' : 'Yes, Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className="app-main">
         <div className="app-layout">

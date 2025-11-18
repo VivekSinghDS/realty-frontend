@@ -192,7 +192,12 @@ export const DocumentProvider = ({ children }) => {
       
       // Set the analysis data
       if (result.analysisData) {
-        dispatch({ type: 'SET_ANALYSIS_DATA', payload: result.analysisData });
+        // Transform audit_checklist to audit_items for component compatibility
+        const transformedAnalysisData = {
+          ...result.analysisData,
+          audit_items: result.analysisData.audit_checklist || result.analysisData.audit_items
+        };
+        dispatch({ type: 'SET_ANALYSIS_DATA', payload: transformedAnalysisData });
       }
       if (result.document) {
         dispatch({ type: 'ADD_DOCUMENT', payload: result.document });

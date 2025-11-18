@@ -91,9 +91,9 @@ export const companyApi = {
   },
 
   // Delete company
-  deleteCompany: async (companyId) => {
+  deleteCompany: async (companyUid) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/companies/${companyId}`, {
+      const response = await fetch(`${API_BASE_URL}/company/${companyUid}`, {
         method: 'DELETE',
         headers: {
           'accept': 'application/json',

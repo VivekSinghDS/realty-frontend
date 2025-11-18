@@ -33,8 +33,8 @@ const companyReducer = (state, action) => {
     case 'DELETE_COMPANY':
       return {
         ...state,
-        companies: state.companies.filter(company => company.id !== action.payload),
-        selectedCompany: state.selectedCompany?.id === action.payload ? null : state.selectedCompany
+        companies: state.companies.filter(company => company.uid !== action.payload),
+        selectedCompany: state.selectedCompany?.uid === action.payload ? null : state.selectedCompany
       };
     case 'CLEAR_ERROR':
       return { ...state, error: null };
@@ -108,11 +108,11 @@ export const CompanyProvider = ({ children }) => {
   };
 
   // Delete company
-  const deleteCompany = async (companyId) => {
+  const deleteCompany = async (companyUid) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
-      await companyApi.deleteCompany(companyId);
-      dispatch({ type: 'DELETE_COMPANY', payload: companyId });
+      await companyApi.deleteCompany(companyUid);
+      dispatch({ type: 'DELETE_COMPANY', payload: companyUid });
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: error.message });
       throw error;
