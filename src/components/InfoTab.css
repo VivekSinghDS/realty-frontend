@@ -83,6 +83,36 @@
   color: #34495e;
   line-height: 1.6;
   margin-bottom: 1rem;
+  font-weight: normal;
+  font-size: 0.9rem;
+}
+
+.summary-value .markdown-content {
+  font-weight: normal;
+  font-size: 0.9rem;
+}
+
+.summary-value .markdown-content * {
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+.summary-value .markdown-strong {
+  font-weight: 600;
+}
+
+.summary-value .markdown-p {
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.summary-value .markdown-ul,
+.summary-value .markdown-ol {
+  font-size: 0.9rem;
+}
+
+.summary-value .markdown-li {
+  font-size: 0.9rem;
 }
 
 .summary-citation {

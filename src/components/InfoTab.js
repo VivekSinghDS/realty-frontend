@@ -89,24 +89,33 @@ const InfoTab = ({ data, executiveSummary, loading }) => {
               {(() => {
                 const summaryData = extractExecutiveSummary(executiveSummary);
                 
+                // Get the actual content to render
+                let contentToRender = null;
                 if (typeof summaryData === 'string') {
-                  return <div>{summaryData}</div>;
+                  contentToRender = summaryData;
+                } else if (summaryData && summaryData.value) {
+                  contentToRender = summaryData.value;
+                } else if (summaryData) {
+                  // If it's an object but no value property, try to stringify it
+                  contentToRender = JSON.stringify(summaryData, null, 2);
                 }
                 
-                if (summaryData && summaryData.value) {
+                if (contentToRender) {
                   return (
                     <div className="executive-summary-formatted">
                       <div className="summary-item">
-                        <span className="summary-label">Summary:</span>
+                        {typeof summaryData === 'object' && summaryData && !summaryData.value && (
+                          <span className="summary-label">Summary:</span>
+                        )}
                         <div className="summary-value">
-                          {renderContent(summaryData.value || 'No summary available')}
+                          {renderContent(contentToRender)}
                         </div>
-                        {summaryData.citation && (
+                        {summaryData && typeof summaryData === 'object' && summaryData.citation && (
                           <div className="summary-citation">
                             Citation: {summaryData.citation}
                           </div>
                         )}
-                        {summaryData.amendments && summaryData.amendments.length > 0 && (
+                        {summaryData && typeof summaryData === 'object' && summaryData.amendments && summaryData.amendments.length > 0 && (
                           <div className="summary-amendments">
                             <h5>Amendments:</h5>
                             <ul className="amendments-list">

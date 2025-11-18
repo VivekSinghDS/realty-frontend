@@ -12,23 +12,28 @@ const MarkdownRenderer = ({ content, className = '' }) => {
   const isMarkdown = (text) => {
     if (typeof text !== 'string') return false;
     
-    // Common Markdown patterns
+    // Common Markdown patterns (using multiline flag where needed)
     const markdownPatterns = [
-      /^#{1,6}\s/,           // Headers
-      /\*\*.*\*\*/,          // Bold
-      /\*.*\*/,              // Italic
-      /^\s*[-*+]\s/,         // Lists
-      /^\s*\d+\.\s/,         // Numbered lists
-      /\[.*\]\(.*\)/,        // Links
-      /```[\s\S]*```/,       // Code blocks
-      /`.*`/,                // Inline code
-      /^\s*>\s/,             // Blockquotes
-      /^\s*\|.*\|/,          // Tables
-      /^---+$/,              // Horizontal rules
-      /\n/,                  // Line breaks (newlines)
+      /^#{1,6}\s/m,           // Headers (multiline)
+      /\*\*[^*]+\*\*/,        // Bold (**text**)
+      /\*[^*]+\*/,            // Italic (*text*)
+      /^\s*[-*+]\s/m,         // Lists (multiline)
+      /^\s*\d+\.\s/m,         // Numbered lists (multiline)
+      /\[.*?\]\(.*?\)/,       // Links
+      /```[\s\S]*?```/,       // Code blocks
+      /`[^`]+`/,              // Inline code
+      /^\s*>\s/m,             // Blockquotes (multiline)
+      /^\s*\|.*\|/m,          // Tables (multiline)
+      /^---+$/m,              // Horizontal rules (multiline)
     ];
     
-    return markdownPatterns.some(pattern => pattern.test(text));
+    // Check if any markdown pattern matches
+    const hasMarkdownPattern = markdownPatterns.some(pattern => pattern.test(text));
+    
+    // Also check for multiple newlines which often indicate formatted content
+    const hasMultipleNewlines = (text.match(/\n/g) || []).length > 1;
+    
+    return hasMarkdownPattern || hasMultipleNewlines;
   };
 
   // If content doesn't look like Markdown, render as plain text with preserved line breaks
