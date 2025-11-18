@@ -365,6 +365,7 @@ export const DocumentProvider = ({ children }) => {
       // Extract the 'cam' property from the response if it exists
       const camData = response.cam || response;
       dispatch({ type: 'SET_CAM_DATA', payload: camData });
+      dispatch({ type: 'SET_CAM_LOADING', payload: false });
       return camData;
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: error.message });

@@ -4,7 +4,7 @@ import './CamTab.css';
 const CamTab = ({ data, loading }) => {
   const [expandedCategories, setExpandedCategories] = useState(new Set());
   const [expandedRules, setExpandedRules] = useState(new Set());
-
+  console.log('clicked here')
   if (loading) {
     return (
       <div className="tab-content-container">
@@ -120,7 +120,7 @@ const CamTab = ({ data, loading }) => {
 
   // Handle nested response structure (backward compatibility)
   const camData = data?.cam || data;
-
+  console.log('camData:', camData);
   // Group rules by category
   const rulesByCategory = {};
   if (camData.allExtractedRules) {

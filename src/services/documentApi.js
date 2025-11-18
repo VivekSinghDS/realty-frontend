@@ -202,12 +202,7 @@ export const documentApi = {
   // Get CAM data for a document (lazy loading)
   getCamData: async (companyId, file, documentType = 'lease') => {
     try {
-      const formData = new FormData();
-      formData.append('assets', file); // Use 'assets' to match the pattern used in /debug/* endpoints
-      if (companyId) {
-        formData.append('companyId', companyId);
-      }
-      formData.append('documentType', documentType);
+      // Return static JSON directly without making API call
       return {
         "documentMetadata": {
           "filename": "BAYER ORIGINAL LEASE",
@@ -1092,20 +1087,7 @@ export const documentApi = {
             "firstExtractedPage": 28
           }
         ]
-      }
-      const response = await fetch(`${API_BASE_URL}/company/${companyId}/documents/cam`, {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch CAM data: ${response.status} ${response.statusText}`);
-      }
-
-      return response.json();
+      };
     } catch (error) {
       console.error('Error fetching CAM data:', error);
       throw error;

@@ -26,7 +26,8 @@ function AppContent() {
     loading, 
     error,
     analyzeDocument,
-    uploadDocument
+    uploadDocument,
+    loadCamData
   } = useDocument();
   
   const [activeTab, setActiveTab] = useState("info");
@@ -38,6 +39,16 @@ function AppContent() {
     console.log('App: Current activeTab:', activeTab);
     setActiveTab(tabId);
     console.log('App: Tab changed to:', tabId);
+    
+    // Load CAM data when CAM tab is clicked
+    if (tabId === 'cam' && selectedCompany?.uid && selectedDocument) {
+      try {
+        // Call loadCamData without requiring a file - it will return static JSON
+        await loadCamData(selectedCompany.uid, null, selectedDocument.type || 'lease');
+      } catch (error) {
+        console.error('Error loading CAM data:', error);
+      }
+    }
   };
   const [showCompanySelector, setShowCompanySelector] = useState(!selectedCompany);
 
